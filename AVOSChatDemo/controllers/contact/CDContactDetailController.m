@@ -11,6 +11,7 @@
 #import "CDBaseNavigationController.h"
 #import "CDChatListController.h"
 #import "CDSessionManager.h"
+#import "CDGroupListController.h"
 
 @interface CDContactDetailController ()
 @property (nonatomic, strong) UILabel *nameLabel;
@@ -57,13 +58,14 @@
     [button addTarget:self action:@selector(startChat:) forControlEvents:UIControlEventTouchUpInside];
     [self.view addSubview:button];
     
-
+    self.title=@"详情";
 }
 
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
     self.nameLabel.text = [self.user username];
 }
+
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
@@ -79,8 +81,7 @@
     //[nav popToRootViewControllerAnimated:NO];
     UINavigationController* nav=[[UINavigationController alloc] initWithRootViewController:controller];
     [self presentViewController:nav animated:YES completion:nil];
-    //[self.navigationController pushViewController:nav animated:YES];
-    //[self.navigationController popToRootViewControllerAnimated:NO];
+
 }
 
 @end

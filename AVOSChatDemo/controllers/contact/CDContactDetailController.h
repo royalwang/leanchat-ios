@@ -8,6 +8,7 @@
 
 #import "CDBaseController.h"
 #import "CDCommon.h"
+#import "CDChatRoomController.h"
 
 @interface CDContactDetailController : CDBaseController
 @property(nonatomic, strong) User *user;

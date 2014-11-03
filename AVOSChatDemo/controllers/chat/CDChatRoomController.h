@@ -6,12 +6,14 @@
 //  Copyright (c) 2014 AVOS. All rights reserved.
 //
 
-#import "CDBaseController.h"
 #import "CDCommon.h"
 #import "JSQMessages.h"
 #import "CDSessionManager.h"
 
-@interface CDChatRoomController : JSQMessagesViewController
+@class CDChatRoomController;
+
+
+@interface CDChatRoomController : JSQMessagesViewController<UIActionSheetDelegate>
 
 @property (nonatomic, strong) User *chatUser;
 @property (nonatomic) CDMsgRoomType type;

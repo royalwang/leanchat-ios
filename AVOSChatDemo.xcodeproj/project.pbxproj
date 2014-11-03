@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		70011B3B1A072205000DD399 /* CDGroupListController.m in Sources */ = {isa = PBXBuildFile; fileRef = 70011B3A1A072205000DD399 /* CDGroupListController.m */; };
+		70011B3F1A07278B000DD399 /* CDGroupListController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 70011B3E1A07278B000DD399 /* CDGroupListController.xib */; };
 		701C826319F92CA60086443F /* AddRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = 701C825C19F92CA60086443F /* AddRequest.m */; };
 		701C826419F92CA60086443F /* AddRequestService.m in Sources */ = {isa = PBXBuildFile; fileRef = 701C825E19F92CA60086443F /* AddRequestService.m */; };
 		701C826519F92CA60086443F /* User.m in Sources */ = {isa = PBXBuildFile; fileRef = 701C826019F92CA60086443F /* User.m */; };
@@ -110,6 +112,9 @@
 
 /* Begin PBXFileReference section */
 		5E5910B43ED8AB630526EAE7 /* libPods-AVOSChatDemo.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-AVOSChatDemo.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		70011B391A072205000DD399 /* CDGroupListController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CDGroupListController.h; sourceTree = "<group>"; };
+		70011B3A1A072205000DD399 /* CDGroupListController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CDGroupListController.m; sourceTree = "<group>"; };
+		70011B3E1A07278B000DD399 /* CDGroupListController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = CDGroupListController.xib; sourceTree = "<group>"; };
 		701C825B19F92CA60086443F /* AddRequest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AddRequest.h; path = ../AddRequest.h; sourceTree = "<group>"; };
 		701C825C19F92CA60086443F /* AddRequest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = AddRequest.m; path = ../AddRequest.m; sourceTree = "<group>"; };
 		701C825D19F92CA60086443F /* AddRequestService.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AddRequestService.h; path = ../AddRequestService.h; sourceTree = "<group>"; };
@@ -464,6 +469,9 @@
 				8CA0553819851199002DA6A1 /* CDContactListController.h */,
 				8CA0553919851199002DA6A1 /* CDContactListController.m */,
 				701C827319F932F50086443F /* CDContactListController.xib */,
+				70011B391A072205000DD399 /* CDGroupListController.h */,
+				70011B3A1A072205000DD399 /* CDGroupListController.m */,
+				70011B3E1A07278B000DD399 /* CDGroupListController.xib */,
 			);
 			path = contact;
 			sourceTree = "<group>";
@@ -699,6 +707,11 @@
 				CLASSPREFIX = CD;
 				LastUpgradeCheck = 0510;
 				ORGANIZATIONNAME = AVOS;
+				TargetAttributes = {
+					8CF21DC6197FCCC1002B9220 = {
+						DevelopmentTeam = Y6X8P44TM5;
+					};
+				};
 			};
 			buildConfigurationList = 8CF21DC2197FCCC1002B9220 /* Build configuration list for PBXProject "AVOSChatDemo" */;
 			compatibilityVersion = "Xcode 3.2";
@@ -755,6 +768,7 @@
 				8CA0554319851E28002DA6A1 /* wechat@2x.png in Resources */,
 				8C76A193199372E800709CE4 /* Icon@2x.png in Resources */,
 				8CB3084E1980F69F00BDC34D /* login@2x.png in Resources */,
+				70011B3F1A07278B000DD399 /* CDGroupListController.xib in Resources */,
 				8CB3086D198111FC00BDC34D /* cancel@2x.png in Resources */,
 				8C76C2631988B7EA000940E1 /* menu_background@2x.png in Resources */,
 				8C9D2DD519CB2CAF007EA70D /* image_placeholder@2x.png in Resources */,
@@ -846,6 +860,7 @@
 				8C76C25219888DD5000940E1 /* CDPopMenu.m in Sources */,
 				8CACCFCD19861F8100E9DE40 /* CDContactDetailController.m in Sources */,
 				8C05A0521981FEE4008B4CC6 /* CDChatListController.m in Sources */,
+				70011B3B1A072205000DD399 /* CDGroupListController.m in Sources */,
 				8CACCFDE19865C0C00E9DE40 /* CDProfileController.m in Sources */,
 				8C470CB11992625B006A4E87 /* QREncoder.mm in Sources */,
 				8C76C24B19888CFB000940E1 /* CDPopMenuItem.m in Sources */,
@@ -972,6 +987,8 @@
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CLANG_CXX_LANGUAGE_STANDARD = "compiler-default";
 				CLANG_CXX_LIBRARY = "compiler-default";
+				CODE_SIGN_IDENTITY = "iPhone Developer: 智维 李 (DQF8JZ3M7J)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: 智维 李 (DQF8JZ3M7J)";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/Frameworks",
@@ -990,6 +1007,7 @@
 					"$(PROJECT_DIR)/Frameworks",
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "f233c7a3-9643-46a0-8f22-f8b9d45af76c";
 				TARGETED_DEVICE_FAMILY = 1;
 				WRAPPER_EXTENSION = app;
 			};
@@ -1003,6 +1021,8 @@
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CLANG_CXX_LANGUAGE_STANDARD = "compiler-default";
 				CLANG_CXX_LIBRARY = "compiler-default";
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/Frameworks",
@@ -1021,6 +1041,7 @@
 					"$(PROJECT_DIR)/Frameworks",
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "f233c7a3-9643-46a0-8f22-f8b9d45af76c";
 				TARGETED_DEVICE_FAMILY = 1;
 				WRAPPER_EXTENSION = app;
 			};

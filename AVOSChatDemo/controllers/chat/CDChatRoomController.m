@@ -13,7 +13,7 @@
 #import "UIImage+Resize.h"
 #import "Utils.h"
 
-@interface CDChatRoomController () <QBImagePickerControllerDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate, UIActionSheetDelegate> {
+@interface CDChatRoomController () <QBImagePickerControllerDelegate, UIImagePickerControllerDelegate> {
     NSMutableDictionary *_loadedData;
     CDSessionManager* sessionManager;
 }
@@ -23,14 +23,72 @@
 
 @implementation CDChatRoomController
 
+#pragma mark - View lifecycle
+
+/**
+ *  Override point for customization.
+ * *  Customize your view.
+ *  Look at the properties on `JSQMessagesViewController` and `JSQMessagesCollectionView` to see what is possible.
+ *
+ *  Customize your layout.
+ *  Look at the properties on `JSQMessagesCollectionViewFlowLayout` to see what is possible.
+ */
+- (void)viewDidLoad
+{
+    [super viewDidLoad];
+    _loadedData = [[NSMutableDictionary alloc] init];
+    sessionManager=[CDSessionManager sharedInstance];
+    if (self.type == CDMsgRoomTypeGroup) {
+        NSString *title = @"group";
+        if (self.group.groupId) {
+            title = [NSString stringWithFormat:@"group:%@", self.group.groupId];
+        }
+        self.title = title;
+    } else {
+        self.title = self.chatUser.username;
+        [sessionManager watchPeerId:self.chatUser.objectId];
+    }
+    
+    /**
+     *  You MUST set your senderId and display name
+     */
+    User* curUser=[User currentUser];
+    self.senderId = curUser.objectId;
+    self.senderDisplayName = curUser.username;
+    
+    self.collectionView.collectionViewLayout.incomingAvatarViewSize = CGSizeZero;
+    self.collectionView.collectionViewLayout.outgoingAvatarViewSize = CGSizeZero;
+    
+    
+    //self.showLoadEarlierMessagesHeader = YES;
+    
+    JSQMessagesBubbleImageFactory *bubbleFactory = [[JSQMessagesBubbleImageFactory alloc] init];
+    
+    self.outgoingBubbleImageData = [bubbleFactory outgoingMessagesBubbleImageWithColor:[UIColor jsq_messageBubbleLightGrayColor]];
+    self.incomingBubbleImageData = [bubbleFactory incomingMessagesBubbleImageWithColor:[UIColor jsq_messageBubbleGreenColor]];
+    
+    self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemStop                                                                                          target:self                                                                                          action:@selector(backPressed:)];
+    
+    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAdd target:self action:@selector(showDetail:)];
+}
+
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(messageUpdated:) name:NOTIFICATION_MESSAGE_UPDATED object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(sessionUpdated:) name:NOTIFICATION_SESSION_UPDATED object:nil];
-//    [AVAnalytics event:@"likebutton" attributes:@{@"source":@{@"view": @"week"}, @"do":@"unfollow"}];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(keyboardWasShown:)
+                                                 name:UIKeyboardDidShowNotification object:nil];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(keyboardWillBeHidden:)
+                                                 name:UIKeyboardWillHideNotification object:nil];
+    //    [AVAnalytics event:@"likebutton" attributes:@{@"source":@{@"view": @"week"}, @"do":@"unfollow"}];
 }
 
 - (void)viewDidAppear:(BOOL)animated{
+    [super viewDidAppear:animated];
     [self messageUpdated:nil];
 }
 
@@ -39,17 +97,44 @@
     NSNotificationCenter* center=[NSNotificationCenter defaultCenter];
     [center removeObserver:self name:NOTIFICATION_MESSAGE_UPDATED object:nil];
     [center removeObserver:self name:NOTIFICATION_SESSION_UPDATED object:nil];
-}
-
--(void)dealloc{
+    [center removeObserver:self name:UIKeyboardDidShowNotification object:nil];
+    
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:UIKeyboardDidShowNotification object:nil];
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:UIKeyboardWillHideNotification object:nil];
     if(self.type==CDMsgRoomTypeSingle){
         [sessionManager unwatchPeerId:self.chatUser.objectId];
     }
 }
 
-- (void)didReceiveMemoryWarning {
-    [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
+
+-(void)backPressed:(id)sender{
+    [self.presentingViewController dismissViewControllerAnimated:YES completion:nil];
+}
+
+-(UIImage*)getImageByMsg:(Msg*)msg{
+    if(msg.type==CDMsgTypeImage){
+        UIImage* image = [_loadedData objectForKey:msg.objectId];
+        if (image) {
+            return image;
+        } else {
+            NSString* path=[CDSessionManager getPathByObjectId:msg.objectId];
+            NSFileManager* fileMan=[NSFileManager defaultManager];
+            //NSLog(@"path=%@",path);
+            if([fileMan fileExistsAtPath:path]){
+                NSData* data=[fileMan contentsAtPath:path];
+                UIImage* image=[UIImage imageWithData:data];
+                [_loadedData setObject:image forKey:msg.objectId];
+                return image;
+            }else{
+                NSLog(@"does not exists image file");
+            }
+        }
+    }
+    return nil;
+}
+
+-(void)keyboardDidShow:(id)sender{
+    NSLog(@"show");
 }
 
 - (void)showDetail:(id)sender {
@@ -70,6 +155,24 @@
 
 #pragma mark - Messages view delegate
 
+- (void)messageUpdated:(NSNotification *)notification {
+    NSString* convid=[CDSessionManager getConvid:self.type otherId:self.chatUser.objectId groupId:self.group.groupId];
+    NSMutableArray *messages  = [[sessionManager getMsgsForConvid:convid] mutableCopy];
+    _messages=messages;
+    [self.collectionView reloadData];
+    [self scrollToBottomAnimated:YES];
+}
+
+- (void)sessionUpdated:(NSNotification *)notification {
+    if (self.type == CDMsgRoomTypeGroup) {
+        NSString *title = @"group";
+        if (self.group.groupId) {
+            title = [NSString stringWithFormat:@"group:%@", self.group.groupId];
+        }
+        self.title = title;
+    }
+}
+
 - (void)sendAttachment:(NSString *)objectId{
     [sessionManager sendAttachment:objectId type:CDMsgTypeImage toPeerId:self.chatUser.objectId group:self.group];
 }
@@ -89,24 +192,6 @@
         }else{
             return NO;
         }
-    }
-}
-
-- (void)messageUpdated:(NSNotification *)notification {
-    NSString* convid=[CDSessionManager getConvid:self.type otherId:self.chatUser.objectId groupId:self.group.groupId];
-    NSMutableArray *messages  = [[sessionManager getMsgsForConvid:convid] mutableCopy];
-    _messages=messages;
-    [self.collectionView reloadData];
-    [self scrollToBottomAnimated:YES];
-}
-
-- (void)sessionUpdated:(NSNotification *)notification {
-    if (self.type == CDMsgRoomTypeGroup) {
-        NSString *title = @"group";
-        if (self.group.groupId) {
-            title = [NSString stringWithFormat:@"group:%@", self.group.groupId];
-        }
-        self.title = title;
     }
 }
 
@@ -232,84 +317,6 @@
    [self dismissImagePickerController];
    [self sendFinish];
 }
-
-#pragma mark - View lifecycle
-
-/**
- *  Override point for customization.
- * *  Customize your view.
- *  Look at the properties on `JSQMessagesViewController` and `JSQMessagesCollectionView` to see what is possible.
- *
- *  Customize your layout.
- *  Look at the properties on `JSQMessagesCollectionViewFlowLayout` to see what is possible.
- */
-- (void)viewDidLoad
-{
-    [super viewDidLoad];
-    _loadedData = [[NSMutableDictionary alloc] init];
-    sessionManager=[CDSessionManager sharedInstance];
-    if (self.type == CDMsgRoomTypeGroup) {
-        NSString *title = @"group";
-        if (self.group.groupId) {
-            title = [NSString stringWithFormat:@"group:%@", self.group.groupId];
-        }
-        self.title = title;
-    } else {
-        self.title = self.chatUser.username;
-        [sessionManager watchPeerId:self.chatUser.objectId];
-    }
-    
-    /**
-     *  You MUST set your senderId and display name
-     */
-    User* curUser=[User currentUser];
-    self.senderId = curUser.objectId;
-    self.senderDisplayName = curUser.username;
-    
-    self.collectionView.collectionViewLayout.incomingAvatarViewSize = CGSizeZero;
-    self.collectionView.collectionViewLayout.outgoingAvatarViewSize = CGSizeZero;
-    
-
-    self.showLoadEarlierMessagesHeader = NO;
-    
-    JSQMessagesBubbleImageFactory *bubbleFactory = [[JSQMessagesBubbleImageFactory alloc] init];
-    
-    self.outgoingBubbleImageData = [bubbleFactory outgoingMessagesBubbleImageWithColor:[UIColor jsq_messageBubbleLightGrayColor]];
-    self.incomingBubbleImageData = [bubbleFactory incomingMessagesBubbleImageWithColor:[UIColor jsq_messageBubbleGreenColor]];
-   
-    UIBarButtonItem *backBtn=[[UIBarButtonItem alloc] initWithTitle:@"Back" style:UIBarButtonItemStyleBordered target:nil action:@selector(backPressed:)];
-    self.navigationItem.leftBarButtonItem = backBtn;
-   
-    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAdd target:self action:@selector(showDetail:)];
-}
-
--(void)backPressed:(id)sender{
-    //[self.navigationController popViewControllerAnimated:YES];
-    [self dismissViewControllerAnimated:YES completion:nil];
-}
-
--(UIImage*)getImageByMsg:(Msg*)msg{
-    if(msg.type==CDMsgTypeImage){
-        UIImage* image = [_loadedData objectForKey:msg.objectId];
-        if (image) {
-            return image;
-        } else {
-            NSString* path=[CDSessionManager getPathByObjectId:msg.objectId];
-            NSFileManager* fileMan=[NSFileManager defaultManager];
-            //NSLog(@"path=%@",path);
-            if([fileMan fileExistsAtPath:path]){
-                NSData* data=[fileMan contentsAtPath:path];
-                UIImage* image=[UIImage imageWithData:data];
-                [_loadedData setObject:image forKey:msg.objectId];
-                return image;
-            }else{
-                NSLog(@"does not exists image file");
-            }
-        }
-    }
-    return nil;
-}
-
 
 #pragma mark - Actions
 
@@ -746,6 +753,34 @@
 {
     NSLog(@"Tapped cell at %@!", NSStringFromCGPoint(touchLocation));
 }
+
+#pragma keyboard event
+- (void)keyboardWasShown:(NSNotification*)aNotification
+{
+    NSDictionary* info = [aNotification userInfo];
+    CGSize kbSize = [[info objectForKey:UIKeyboardFrameBeginUserInfoKey] CGRectValue].size;
+    
+    UIEdgeInsets contentInsets = UIEdgeInsetsMake(0.0, 0.0, kbSize.height, 0.0);
+    self.collectionView.contentInset = contentInsets;
+    self.collectionView.scrollIndicatorInsets = contentInsets;
+    
+    // If active text field is hidden by keyboard, scroll it so it's visible
+    // Your app might not need or want this behavior.
+    CGRect aRect = self.view.frame;
+    aRect.size.height -= kbSize.height;
+    if (!CGRectContainsPoint(aRect, self.inputToolbar.frame.origin) ) {
+        //[self.collectionView scrollRectToVisible:self.inputToolbar.frame animated:YES];
+    }
+}
+
+// Called when the UIKeyboardWillHideNotification is sent
+- (void)keyboardWillBeHidden:(NSNotification*)aNotification
+{
+    UIEdgeInsets contentInsets = UIEdgeInsetsZero;
+    self.collectionView.contentInset = contentInsets;
+    self.collectionView.scrollIndicatorInsets = contentInsets;
+}
+
 
 @end
 

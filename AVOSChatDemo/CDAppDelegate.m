@@ -47,17 +47,21 @@
     }
     self.window.backgroundColor = [UIColor whiteColor];
     [self.window makeKeyAndVisible];
-    if (SYSTEM_VERSION < 8.0) {
+    
+    if ([application respondsToSelector:@selector(isRegisteredForRemoteNotifications)]==NO) {
         [application registerForRemoteNotificationTypes:
          UIRemoteNotificationTypeBadge |
          UIRemoteNotificationTypeAlert |
          UIRemoteNotificationTypeSound];
     } else {
-        [application performSelector:@selector(registerForRemoteNotifications)];
+        UIUserNotificationSettings *settings = [UIUserNotificationSettings settingsForTypes:UIUserNotificationTypeAlert | UIUserNotificationTypeBadge | UIUserNotificationTypeSound categories:nil];
+        [application registerUserNotificationSettings:settings];
+        [application registerForRemoteNotifications];
     }
     setenv("LOG_CURL", "YES", 0);
     return YES;
 }
+
 
 - (void)applicationWillResignActive:(UIApplication *)application
 {
@@ -87,23 +91,35 @@
 }
 
 - (void)application:(UIApplication *)app didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken {
-    
     //推送功能打开时, 注册当前的设备, 同时记录用户活跃, 方便进行有针对的推送
+    NSLog(@"didRegister");
     AVInstallation *currentInstallation = [AVInstallation currentInstallation];
     [currentInstallation setDeviceTokenFromData:deviceToken];
-    [currentInstallation saveInBackground];
+    [currentInstallation saveEventually];
 }
 
 -(void)application:(UIApplication *)application didFailToRegisterForRemoteNotificationsWithError:(NSError *)error{
     
     //可选 通过统计功能追踪打开提醒失败, 或者用户不授权本应用推送
-    [AVAnalytics event:@"开启推送失败" label:[error description]];
+    //[AVAnalytics event:@"开启推送失败" label:[error description]];
+    NSLog(@"error=%@",[error description]);
 }
 
 -(void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo{
     //可选 通过统计功能追踪通过提醒打开应用的行为
-    [AVAnalytics trackAppOpenedWithRemoteNotificationPayload:userInfo];
+    if (application.applicationState == UIApplicationStateActive) {
+        // 转换成一个本地通知，显示到通知栏，你也可以直接显示出一个alertView，只是那样稍显aggressive：）
+        UILocalNotification *localNotification = [[UILocalNotification alloc] init];
+        localNotification.userInfo = userInfo;
+        localNotification.soundName = UILocalNotificationDefaultSoundName;
+        localNotification.alertBody = [[userInfo objectForKey:@"aps"] objectForKey:@"alert"];
+        localNotification.fireDate = [NSDate date];
+        [[UIApplication sharedApplication] scheduleLocalNotification:localNotification];
+    } else {
+        [AVAnalytics trackAppOpenedWithRemoteNotificationPayload:userInfo];
+    }
     
+    NSLog(@"receiveRemoteNotification");
     //这儿你可以加入自己的代码 根据推送的数据进行相应处理
 }
 
@@ -133,6 +149,8 @@
     self.window.rootViewController = tab;
     [[CDSessionManager sharedInstance] registerUser:[User currentUser]];
     [[CDSessionManager sharedInstance] openSession];
+    
+    [UIApplication sharedApplication].applicationIconBadgeNumber=0;
 }
 
 @end
