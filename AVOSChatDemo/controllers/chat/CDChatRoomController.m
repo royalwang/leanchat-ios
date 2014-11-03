@@ -13,7 +13,7 @@
 #import "UIImage+Resize.h"
 #import "Utils.h"
 
-@interface CDChatRoomController () <QBImagePickerControllerDelegate, UIImagePickerControllerDelegate> {
+@interface CDChatRoomController () <QBImagePickerControllerDelegate, UIImagePickerControllerDelegate,UINavigationControllerDelegate> {
     NSMutableDictionary *_loadedData;
     CDSessionManager* sessionManager;
 }
@@ -46,7 +46,6 @@
         self.title = title;
     } else {
         self.title = self.chatUser.username;
-        [sessionManager watchPeerId:self.chatUser.objectId];
     }
     
     /**
@@ -72,23 +71,13 @@
     self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAdd target:self action:@selector(showDetail:)];
 }
 
-- (void)viewWillAppear:(BOOL)animated {
-    [super viewWillAppear:animated];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(messageUpdated:) name:NOTIFICATION_MESSAGE_UPDATED object:nil];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(sessionUpdated:) name:NOTIFICATION_SESSION_UPDATED object:nil];
-    
-    [[NSNotificationCenter defaultCenter] addObserver:self
-                                             selector:@selector(keyboardWasShown:)
-                                                 name:UIKeyboardDidShowNotification object:nil];
-    
-    [[NSNotificationCenter defaultCenter] addObserver:self
-                                             selector:@selector(keyboardWillBeHidden:)
-                                                 name:UIKeyboardWillHideNotification object:nil];
-    //    [AVAnalytics event:@"likebutton" attributes:@{@"source":@{@"view": @"week"}, @"do":@"unfollow"}];
-}
-
 - (void)viewDidAppear:(BOOL)animated{
     [super viewDidAppear:animated];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(messageUpdated:) name:NOTIFICATION_MESSAGE_UPDATED object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(sessionUpdated:) name:NOTIFICATION_SESSION_UPDATED object:nil];
+    if(self.type==CDMsgRoomTypeSingle){
+        [sessionManager watchPeerId:self.chatUser.objectId];
+    }
     [self messageUpdated:nil];
 }
 
@@ -206,9 +195,7 @@
                 UIImagePickerController *imagePickerController = [[UIImagePickerController alloc] init];
                 imagePickerController.delegate = self;
                 imagePickerController.sourceType = UIImagePickerControllerSourceTypeCamera;
-                [self presentViewController:imagePickerController animated:YES completion:^{
-                    
-                }];
+                [self presentViewController:imagePickerController animated:YES completion:nil];
             }
             @catch (NSException *exception) {
                 
