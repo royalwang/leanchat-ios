@@ -125,7 +125,8 @@ enum : NSUInteger {
     } else {
         controller.chatUser=chatRoom.chatUser;
     }
-    [self.navigationController pushViewController:controller animated:YES];
+    UINavigationController* nav=[[UINavigationController alloc] initWithRootViewController:controller];
+    [self presentViewController:nav animated:YES completion:nil];
 }
 
 - (CDPopMenu *)popMenu {

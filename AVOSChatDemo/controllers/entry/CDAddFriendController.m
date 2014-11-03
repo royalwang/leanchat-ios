@@ -31,6 +31,7 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    self.title=@"查找好友";
     [_searchBar setDelegate:self];
     [_tableView setDelegate:self];
     [_tableView setDataSource:self];

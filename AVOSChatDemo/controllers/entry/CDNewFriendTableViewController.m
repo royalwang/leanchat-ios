@@ -38,6 +38,7 @@
             [self.tableView reloadData];
         }
     }];
+    self.title=@"新的朋友";
 }
 
 - (void)didReceiveMemoryWarning
