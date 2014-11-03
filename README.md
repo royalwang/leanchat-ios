@@ -1,6 +1,8 @@
 ## 介绍
 这个示例项目是为了帮助使用AVOSCloud的开发者快速实现具有实时通讯功能的应用.
 
+![image](./screenshot/shot.png)
+
 ## 如何运行
 
 用XCode打开`AVOSChatDemo.xcworkspace`（注意不是`AVOSChatDemo.xcodeproj`，因为用了pods来引入模块），选择运行的scheme和设备，点击运行按钮或菜单`Product`->`Run`或快捷键`Command(⌘)`+`r`就可以运行此示例
