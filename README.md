@@ -1,7 +1,13 @@
+![image](./screenshot/shot.png)
+
+## Leanchat 项目构成
+* [Leanchat-android](https://github.com/leancloud/leanchat)
+* [Leanchat-ios](https://github.com/leancloud/leanchat-ios)
+* [Leanchat-cloud-code](https://github.com/leancloud/leanchat-cloudcode)，Leanchat 云代码后端
+
+
 ## 介绍
 这个示例项目是为了帮助使用AVOSCloud的开发者快速实现具有实时通讯功能的应用.
-
-![image](./screenshot/shot.png)
 
 ## 如何运行
 
