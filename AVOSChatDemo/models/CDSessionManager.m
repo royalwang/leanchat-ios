@@ -442,6 +442,7 @@ static NSString *messagesTableSQL=@"create table if not exists messages (id inte
     Msg* msg=[Msg fromAVMessage:avMsg];
     msg.status=CDMsgStatusSendFailed;
     [self updateStatus:msg];
+    [self notifyMessageUpdate];
 }
 
 #pragma session delegate
@@ -451,7 +452,7 @@ static NSString *messagesTableSQL=@"create table if not exists messages (id inte
 
 - (void)session:(AVSession *)session messageSendFailed:(AVMessage *)message error:(NSError *)error {
     NSLog(@"%s", __PRETTY_FUNCTION__);
-    NSLog(@"session:%@ message:%@ toPeerId:%@ error:%@", session.peerId, message, message.toPeerId, error);
+    NSLog(@"session:%@ message:%@ toPeerId:%@ error:%@", session.peerId, message.payload, message.toPeerId, error);
     [self messageSendFailure:message group:nil];
 }
 
