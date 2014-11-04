@@ -8,11 +8,11 @@
 
 #import "CDContactListController.h"
 #import "CDCommon.h"
-#import "CDContactDetailController.h"
 #import "UserService.h"
 #import "CDAddFriendController.h"
 #import "CDBaseNavigationController.h"
 #import "CDNewFriendTableViewController.h"
+#import "CDUserInfoController.h"
 #import "CDSessionManager.h"
 
 enum : NSUInteger {
@@ -108,7 +108,7 @@ enum : NSUInteger {
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     User *user = [self.users objectAtIndex:indexPath.row];
-    CDContactDetailController *controller = [[CDContactDetailController alloc] initWithUser:user];
+    CDUserInfoController *controller=[[CDUserInfoController alloc] initWithUser:user];
     [self.navigationController pushViewController:controller animated:YES];
 }
 @end

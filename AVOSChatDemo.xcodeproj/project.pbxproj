@@ -72,7 +72,6 @@
 		8CA0554119851E28002DA6A1 /* profile@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 8CA0553D19851E28002DA6A1 /* profile@2x.png */; };
 		8CA0554219851E28002DA6A1 /* sns@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 8CA0553E19851E28002DA6A1 /* sns@2x.png */; };
 		8CA0554319851E28002DA6A1 /* wechat@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 8CA0553F19851E28002DA6A1 /* wechat@2x.png */; };
-		8CACCFCD19861F8100E9DE40 /* CDContactDetailController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8CACCFCC19861F8100E9DE40 /* CDContactDetailController.m */; };
 		8CACCFDE19865C0C00E9DE40 /* CDProfileController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8CACCFDD19865C0C00E9DE40 /* CDProfileController.m */; };
 		8CACCFE21986676100E9DE40 /* CDChatRoomController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8CACCFE11986676100E9DE40 /* CDChatRoomController.m */; };
 		8CB308361980E67700BDC34D /* CDBaseController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8CB3082F1980E67700BDC34D /* CDBaseController.m */; };
@@ -223,8 +222,6 @@
 		8CA0553D19851E28002DA6A1 /* profile@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "profile@2x.png"; sourceTree = "<group>"; };
 		8CA0553E19851E28002DA6A1 /* sns@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "sns@2x.png"; sourceTree = "<group>"; };
 		8CA0553F19851E28002DA6A1 /* wechat@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "wechat@2x.png"; sourceTree = "<group>"; };
-		8CACCFCB19861F8100E9DE40 /* CDContactDetailController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CDContactDetailController.h; sourceTree = "<group>"; };
-		8CACCFCC19861F8100E9DE40 /* CDContactDetailController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CDContactDetailController.m; sourceTree = "<group>"; };
 		8CACCFDC19865C0C00E9DE40 /* CDProfileController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CDProfileController.h; sourceTree = "<group>"; };
 		8CACCFDD19865C0C00E9DE40 /* CDProfileController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CDProfileController.m; sourceTree = "<group>"; };
 		8CACCFE01986676100E9DE40 /* CDChatRoomController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CDChatRoomController.h; sourceTree = "<group>"; };
@@ -467,8 +464,6 @@
 				701C827A19F9359A0086443F /* CDNewFriendTableViewController.h */,
 				701C827B19F9359A0086443F /* CDNewFriendTableViewController.m */,
 				701C827C19F9359A0086443F /* CDNewFriendTableViewController.xib */,
-				8CACCFCB19861F8100E9DE40 /* CDContactDetailController.h */,
-				8CACCFCC19861F8100E9DE40 /* CDContactDetailController.m */,
 				8CA0553819851199002DA6A1 /* CDContactListController.h */,
 				8CA0553919851199002DA6A1 /* CDContactListController.m */,
 				701C827319F932F50086443F /* CDContactListController.xib */,
@@ -864,7 +859,6 @@
 				8CB308371980E67700BDC34D /* CDBaseNavigationController.m in Sources */,
 				701C829119F96D850086443F /* Utils.m in Sources */,
 				8C76C25219888DD5000940E1 /* CDPopMenu.m in Sources */,
-				8CACCFCD19861F8100E9DE40 /* CDContactDetailController.m in Sources */,
 				8C05A0521981FEE4008B4CC6 /* CDChatListController.m in Sources */,
 				70011B3B1A072205000DD399 /* CDGroupListController.m in Sources */,
 				8CACCFDE19865C0C00E9DE40 /* CDProfileController.m in Sources */,

@@ -10,5 +10,9 @@
 #import "CDCommon.h"
 
 @interface CDUserInfoController : UIViewController
+
 @property (weak,nonatomic) User *user;
+
+-(instancetype)initWithUser:(User*)user;
+
 @end

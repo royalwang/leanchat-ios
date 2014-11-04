@@ -19,9 +19,14 @@
 @property (weak, nonatomic) IBOutlet UIButton *actionBtn;
 @end
 
-
-
 @implementation CDUserInfoController
+
+-(instancetype)initWithUser:(User*)user{
+    if(self==[super init]){
+        _user=user;
+    };
+    return self;
+}
 
 #pragma lifecycle
 
