@@ -111,4 +111,5 @@ enum : NSUInteger {
     CDUserInfoController *controller=[[CDUserInfoController alloc] initWithUser:user];
     [self.navigationController pushViewController:controller animated:YES];
 }
+
 @end

@@ -302,10 +302,10 @@ static NSString *messagesTableSQL=@"create table if not exists messages (id inte
 
 - (void )insertMessageToDBAndNotify:(Msg*)msg{
     [self insertMsgToDB:msg];
-    [self postMessageUpdateNotify];
+    [self notifyMessageUpdate];
 }
 
--(void)postMessageUpdateNotify{
+-(void)notifyMessageUpdate{
     [[NSNotificationCenter defaultCenter] postNotificationName:NOTIFICATION_MESSAGE_UPDATED object:nil userInfo:nil];
 }
 
@@ -416,62 +416,47 @@ static NSString *messagesTableSQL=@"create table if not exists messages (id inte
         });
     }else{
         [self updateStatusAndTimestamp:msg];
-        [self postMessageUpdateNotify];
+        [self notifyMessageUpdate];
     }
 }
 
 -(void)updateStatusAndTimestamp:(Msg*)msg{
     NSLog(@"%s",__PRETTY_FUNCTION__);
-    [_database executeUpdate:@"update messages set status=?,timestamp=? where objectId=?" withArgumentsInArray:@[@(CDMsgStatusSendReceived),msg.content,msg.objectId]];
+    msg.status=CDMsgStatusSendReceived;
+    [self updateStatus:msg];
+    [_database executeUpdate:@"update messages set timestamp=? where objectId=?" withArgumentsInArray:@[msg.content,msg.objectId]];
 }
 
+-(void)updateStatus:(Msg*)msg{
+    [_database executeUpdate:@"update messages set status=? where objectId=?" withArgumentsInArray:@[@(msg.status),msg.objectId]];
+}
+
+-(void)messageSendFinish:(AVMessage*)avMsg group:(AVGroup*)group{
+    Msg* msg=[Msg fromAVMessage:avMsg];
+    msg.status=CDMsgStatusSendSucceed;
+    [self updateStatus:msg];
+    [self notifyMessageUpdate];
+}
+
+-(void)messageSendFailure:(AVMessage*)avMsg group:(AVGroup*)group{
+    Msg* msg=[Msg fromAVMessage:avMsg];
+    msg.status=CDMsgStatusSendFailed;
+    [self updateStatus:msg];
+}
+
+#pragma session delegate
 - (void)session:(AVSession *)session didReceiveMessage:(AVMessage *)message {
     [self dealReceiveMessage:message group:nil];
-    
-    //[[NSNotificationCenter defaultCenter] postNotificationName:NOTIFICATION_SESSION_UPDATED object:session userInfo:nil];
-    
-    //    NSError *error;
-    //    NSData *data = [message dataUsingEncoding:NSUTF8StringEncoding];
-    //    NSDictionary *jsonDict = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingMutableContainers error:&error];
-    //
-    //    if (error == nil) {
-    //        KAMessage *chatMessage = nil;
-    //        if ([jsonDict objectForKey:@"st"]) {
-    //            NSString *displayName = [jsonDict objectForKey:@"dn"];
-    //            NSString *status = [jsonDict objectForKey:@"st"];
-    //            if ([status isEqualToString:@"on"]) {
-    //                chatMessage = [[KAMessage alloc] initWithDisplayName:displayName Message:@"上线了" fromMe:YES];
-    //            } else {
-    //                chatMessage = [[KAMessage alloc] initWithDisplayName:displayName Message:@"下线了" fromMe:YES];
-    //            }
-    //            chatMessage.isStatus = YES;
-    //        } else {
-    //            NSString *displayName = [jsonDict objectForKey:@"dn"];
-    //            NSString *message = [jsonDict objectForKey:@"msg"];
-    //            if ([displayName isEqualToString:MY_NAME]) {
-    //                chatMessage = [[KAMessage alloc] initWithDisplayName:displayName Message:message fromMe:YES];
-    //            } else {
-    //                chatMessage = [[KAMessage alloc] initWithDisplayName:displayName Message:message fromMe:NO];
-    //            }
-    //        }
-    //
-    //        if (chatMessage) {
-    //            [_messages addObject:chatMessage];
-    //            //            [self.tableView beginUpdates];
-    //            [self.tableView reloadData];
-    //            //            [self.tableView insertRowsAtIndexPaths:[NSArray arrayWithObject:[NSIndexPath indexPathForRow:_messages.count - 1 inSection:0]] withRowAnimation:UITableViewRowAnimationNone];
-    //            [self.tableView scrollRectToVisible:self.tableView.tableFooterView.frame animated:YES];
-    //            //            [self.tableView endUpdates];
-    //        }
-    //    }
 }
 
 - (void)session:(AVSession *)session messageSendFailed:(AVMessage *)message error:(NSError *)error {
     NSLog(@"%s", __PRETTY_FUNCTION__);
     NSLog(@"session:%@ message:%@ toPeerId:%@ error:%@", session.peerId, message, message.toPeerId, error);
+    [self messageSendFailure:message group:nil];
 }
 
 - (void)session:(AVSession *)session messageSendFinished:(AVMessage *)message {
+    [self messageSendFinish:message group:nil];
     NSLog(@"%s", __PRETTY_FUNCTION__);
     NSLog(@"session:%@ message:%@ toPeerId:%@", session.peerId, message.payload, message.toPeerId);
 }
