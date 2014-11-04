@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		70011B3B1A072205000DD399 /* CDGroupListController.m in Sources */ = {isa = PBXBuildFile; fileRef = 70011B3A1A072205000DD399 /* CDGroupListController.m */; };
 		70011B3F1A07278B000DD399 /* CDGroupListController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 70011B3E1A07278B000DD399 /* CDGroupListController.xib */; };
+		70011B771A07DF3C000DD399 /* ResizableButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 70011B761A07DF3C000DD399 /* ResizableButton.m */; };
 		701C826319F92CA60086443F /* AddRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = 701C825C19F92CA60086443F /* AddRequest.m */; };
 		701C826419F92CA60086443F /* AddRequestService.m in Sources */ = {isa = PBXBuildFile; fileRef = 701C825E19F92CA60086443F /* AddRequestService.m */; };
 		701C826519F92CA60086443F /* User.m in Sources */ = {isa = PBXBuildFile; fileRef = 701C826019F92CA60086443F /* User.m */; };
@@ -115,6 +116,8 @@
 		70011B391A072205000DD399 /* CDGroupListController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CDGroupListController.h; sourceTree = "<group>"; };
 		70011B3A1A072205000DD399 /* CDGroupListController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CDGroupListController.m; sourceTree = "<group>"; };
 		70011B3E1A07278B000DD399 /* CDGroupListController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = CDGroupListController.xib; sourceTree = "<group>"; };
+		70011B751A07DF3C000DD399 /* ResizableButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ResizableButton.h; sourceTree = "<group>"; };
+		70011B761A07DF3C000DD399 /* ResizableButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ResizableButton.m; sourceTree = "<group>"; };
 		701C825B19F92CA60086443F /* AddRequest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AddRequest.h; path = ../AddRequest.h; sourceTree = "<group>"; };
 		701C825C19F92CA60086443F /* AddRequest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = AddRequest.m; path = ../AddRequest.m; sourceTree = "<group>"; };
 		701C825D19F92CA60086443F /* AddRequestService.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AddRequestService.h; path = ../AddRequestService.h; sourceTree = "<group>"; };
@@ -565,6 +568,8 @@
 				701C828419F957100086443F /* CDNewFriendTableCell.h */,
 				701C828519F957100086443F /* CDNewFriendTableCell.m */,
 				701C828619F957100086443F /* CDNewFriendTableCell.xib */,
+				70011B751A07DF3C000DD399 /* ResizableButton.h */,
+				70011B761A07DF3C000DD399 /* ResizableButton.m */,
 			);
 			path = views;
 			sourceTree = "<group>";
@@ -847,6 +852,7 @@
 				8CACCFE21986676100E9DE40 /* CDChatRoomController.m in Sources */,
 				8C925CB31987991000D2750B /* FMDatabasePool.m in Sources */,
 				8C470CB8199264B0006A4E87 /* CDChatDetailController.mm in Sources */,
+				70011B771A07DF3C000DD399 /* ResizableButton.m in Sources */,
 				8CB308391980E67700BDC34D /* CDBaseTableController.m in Sources */,
 				8CB308361980E67700BDC34D /* CDBaseController.m in Sources */,
 				8C78144E19CABA2600A6AFB3 /* QBAssetsCollectionCheckmarkView.m in Sources */,

@@ -15,4 +15,11 @@
     [AVCloud callFunctionInBackground:action withParameters:dict block:callback];
 }
 
++(void)tryCreateAddRequest:(User*)toUser callback:(AVIdResultBlock)callback{
+    User* user=[User currentUser];
+    assert(user!=nil);
+    NSDictionary* dict=@{@"fromUserId":user.objectId,@"toUserId":toUser.objectId};
+    [AVCloud callFunctionInBackground:@"tryCreateAddRequest" withParameters:dict block:callback];
+}
+
 @end

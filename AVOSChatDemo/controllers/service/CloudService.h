@@ -13,5 +13,8 @@ static NSString *kAddFriendFnName=@"addFriend";
 static NSString *kRemoveFriendFnName=@"removeFriend";
 
 @interface CloudService : NSObject
+
 +(void)callCloudRelationFn:(User*)fromUser toUser:(User*)toUser action:(NSString*)action callback:(AVIdResultBlock)callback;
++(void)tryCreateAddRequest:(User*)toUser callback:(AVIdResultBlock)callback;
+
 @end

@@ -68,7 +68,9 @@ enum : NSUInteger {
     [UserService findFriends:^(NSArray *objects, NSError *error) {
         if (objects) {
             self.users = [objects mutableCopy];
-            [[CDSessionManager sharedInstance] registerUsers:self.users];
+            CDSessionManager* sessionMan=[CDSessionManager sharedInstance];
+            [sessionMan registerUsers:self.users];
+            [sessionMan setFriends:self.users];
             [self.tableView reloadData];
         } else {
             NSLog(@"error:%@", error);

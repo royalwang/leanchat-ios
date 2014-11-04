@@ -73,15 +73,6 @@
 
 #pragma mark - Actions
 
--(void)startChat:(id)sender {
-    CDChatRoomController *controller = [CDChatRoomController messagesViewController];
-    controller.chatUser = self.user;
-    controller.type = CDMsgRoomTypeSingle;
-    //self.tabBarController.selectedIndex = 0;
-    //[nav popToRootViewControllerAnimated:NO];
-    UINavigationController* nav=[[UINavigationController alloc] initWithRootViewController:controller];
-    [self presentViewController:nav animated:YES completion:nil];
 
-}
 
 @end

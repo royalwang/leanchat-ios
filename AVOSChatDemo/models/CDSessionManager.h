@@ -15,6 +15,9 @@
 //- (void)startSession;
 //- (void)addSession:(AVSession *)session;
 //- (NSArray *)sessions;
+
+@property NSMutableArray* friends;
+
 - (NSArray *)chatRooms;
 - (void)watchPeerId:(NSString *)peerId;
 -(void)unwatchPeerId:(NSString*)peerId;
