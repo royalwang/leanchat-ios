@@ -39,11 +39,7 @@
     _loadedData = [[NSMutableDictionary alloc] init];
     sessionManager=[CDSessionManager sharedInstance];
     if (self.type == CDMsgRoomTypeGroup) {
-        NSString *title = @"group";
-        if (self.group.groupId) {
-            title = [NSString stringWithFormat:@"group:%@", self.group.groupId];
-        }
-        self.title = title;
+        self.title = [_chatGroup getTitle];
     } else {
         self.title = self.chatUser.username;
     }
@@ -69,15 +65,18 @@
     self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemStop                                                                                          target:self                                                                                          action:@selector(backPressed:)];
     
     self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAdd target:self action:@selector(showDetail:)];
+    
+    if(self.type==CDMsgRoomTypeSingle){
+        [sessionManager watchPeerId:self.chatUser.objectId];
+    }else{
+        _group=[sessionManager joinGroup:_chatGroup.objectId];
+    }
 }
 
 - (void)viewDidAppear:(BOOL)animated{
     [super viewDidAppear:animated];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(messageUpdated:) name:NOTIFICATION_MESSAGE_UPDATED object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(sessionUpdated:) name:NOTIFICATION_SESSION_UPDATED object:nil];
-    if(self.type==CDMsgRoomTypeSingle){
-        [sessionManager watchPeerId:self.chatUser.objectId];
-    }
     [self messageUpdated:nil];
 }
 

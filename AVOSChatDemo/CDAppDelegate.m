@@ -15,6 +15,7 @@
 #import "CDContactListController.h"
 #import "CDProfileController.h"
 #import "CDSessionManager.h"
+#import "ChatGroup.h"
 
 @implementation CDAppDelegate
 
@@ -22,6 +23,7 @@
 {
     self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
     [AddRequest registerSubclass];
+    [ChatGroup registerSubclass];
 #if USE_US
     [AVOSCloud useAVCloudUS];
 #endif

@@ -7,7 +7,8 @@
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="CDContactListController">
             <connections>
-                <outlet property="headerView" destination="5wa-ha-F9h" id="akb-MV-GPL"/>
+                <outlet property="groupView" destination="0u5-QL-7YS" id="AKi-dc-VTa"/>
+                <outlet property="myNewFriendView" destination="5wa-ha-F9h" id="wm6-g4-0NJ"/>
                 <outlet property="tableView" destination="2WW-ht-IE3" id="az5-Ym-3kn"/>
                 <outlet property="view" destination="iN0-l3-epB" id="I2N-1z-02g"/>
             </connections>
@@ -27,18 +28,39 @@
                     <rect key="frame" x="0.0" y="66" width="319" height="502"/>
                     <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                     <view key="tableHeaderView" contentMode="scaleToFill" id="5wa-ha-F9h">
-                        <rect key="frame" x="0.0" y="0.0" width="319" height="44"/>
+                        <rect key="frame" x="0.0" y="0.0" width="319" height="94"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
-                            <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="new_friends_icon" translatesAutoresizingMaskIntoConstraints="NO" id="Cxa-bj-G8o">
-                                <rect key="frame" x="23" y="5" width="34" height="31"/>
-                            </imageView>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="新的朋友" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="RNg-MO-A8e">
-                                <rect key="frame" x="82" y="11" width="68" height="21"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                <color key="textColor" red="1" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
-                                <nil key="highlightedColor"/>
-                            </label>
+                            <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="tPO-Ct-eLZ">
+                                <rect key="frame" x="0.0" y="0.0" width="319" height="44"/>
+                                <subviews>
+                                    <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="new_friends_icon" translatesAutoresizingMaskIntoConstraints="NO" id="Cxa-bj-G8o">
+                                        <rect key="frame" x="18" y="8" width="34" height="31"/>
+                                    </imageView>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="新的朋友" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="RNg-MO-A8e">
+                                        <rect key="frame" x="60" y="13" width="68" height="21"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                        <color key="textColor" red="1" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                </subviews>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                            </view>
+                            <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="0u5-QL-7YS">
+                                <rect key="frame" x="0.0" y="46" width="319" height="55"/>
+                                <subviews>
+                                    <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="group_icon.png" translatesAutoresizingMaskIntoConstraints="NO" id="nQK-AV-0DX">
+                                        <rect key="frame" x="19" y="8" width="34" height="31"/>
+                                    </imageView>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="群组" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="QGm-lY-9wR">
+                                        <rect key="frame" x="61" y="17" width="34" height="21"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                        <color key="textColor" red="1" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                </subviews>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                            </view>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                     </view>
@@ -49,6 +71,7 @@
         </view>
     </objects>
     <resources>
+        <image name="group_icon.png" width="64" height="63"/>
         <image name="new_friends_icon" width="80" height="80"/>
     </resources>
     <simulatedMetricsContainer key="defaultSimulatedMetrics">

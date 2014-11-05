@@ -7,8 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		70011B3B1A072205000DD399 /* CDGroupListController.m in Sources */ = {isa = PBXBuildFile; fileRef = 70011B3A1A072205000DD399 /* CDGroupListController.m */; };
-		70011B3F1A07278B000DD399 /* CDGroupListController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 70011B3E1A07278B000DD399 /* CDGroupListController.xib */; };
 		70011B771A07DF3C000DD399 /* ResizableButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 70011B761A07DF3C000DD399 /* ResizableButton.m */; };
 		701C826D19F92CD00086443F /* CDAddFriendController.m in Sources */ = {isa = PBXBuildFile; fileRef = 701C826819F92CD00086443F /* CDAddFriendController.m */; };
 		701C826E19F92CD00086443F /* CDAddFriendController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 701C826919F92CD00086443F /* CDAddFriendController.xib */; };
@@ -33,6 +31,11 @@
 		7068F6011A0A1B2000077FEC /* AppIcon60x60@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 7068F6001A0A1B2000077FEC /* AppIcon60x60@2x.png */; };
 		7068F6051A0A603800077FEC /* CDImageLabelTableCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 7068F6031A0A603800077FEC /* CDImageLabelTableCell.m */; };
 		7068F6061A0A603800077FEC /* CDImageLabelTableCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 7068F6041A0A603800077FEC /* CDImageLabelTableCell.xib */; };
+		7068F6081A0A838C00077FEC /* group_icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 7068F6071A0A838C00077FEC /* group_icon.png */; };
+		7068F60F1A0A85DC00077FEC /* CDGroupTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7068F60D1A0A85DC00077FEC /* CDGroupTableViewController.m */; };
+		7068F6101A0A85DC00077FEC /* CDGroupTableViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 7068F60E1A0A85DC00077FEC /* CDGroupTableViewController.xib */; };
+		7068F6131A0A878600077FEC /* GroupService.m in Sources */ = {isa = PBXBuildFile; fileRef = 7068F6121A0A878600077FEC /* GroupService.m */; };
+		7068F6161A0A89E300077FEC /* ChatGroup.m in Sources */ = {isa = PBXBuildFile; fileRef = 7068F6151A0A89E300077FEC /* ChatGroup.m */; };
 		8C05A0521981FEE4008B4CC6 /* CDChatListController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C05A0511981FEE4008B4CC6 /* CDChatListController.m */; };
 		8C470C9D19926019006A4E87 /* libiconv.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 8C470C9C19926019006A4E87 /* libiconv.dylib */; };
 		8C470CAF1992625B006A4E87 /* DataMatrix.mm in Sources */ = {isa = PBXBuildFile; fileRef = 8C470CAA1992625B006A4E87 /* DataMatrix.mm */; };
@@ -116,9 +119,6 @@
 
 /* Begin PBXFileReference section */
 		5E5910B43ED8AB630526EAE7 /* libPods-AVOSChatDemo.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-AVOSChatDemo.a"; sourceTree = BUILT_PRODUCTS_DIR; };
-		70011B391A072205000DD399 /* CDGroupListController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CDGroupListController.h; sourceTree = "<group>"; };
-		70011B3A1A072205000DD399 /* CDGroupListController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CDGroupListController.m; sourceTree = "<group>"; };
-		70011B3E1A07278B000DD399 /* CDGroupListController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = CDGroupListController.xib; sourceTree = "<group>"; };
 		70011B751A07DF3C000DD399 /* ResizableButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ResizableButton.h; sourceTree = "<group>"; };
 		70011B761A07DF3C000DD399 /* ResizableButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ResizableButton.m; sourceTree = "<group>"; };
 		701C826719F92CD00086443F /* CDAddFriendController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CDAddFriendController.h; path = ../entry/CDAddFriendController.h; sourceTree = "<group>"; };
@@ -157,6 +157,14 @@
 		7068F6021A0A603800077FEC /* CDImageLabelTableCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CDImageLabelTableCell.h; sourceTree = "<group>"; };
 		7068F6031A0A603800077FEC /* CDImageLabelTableCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CDImageLabelTableCell.m; sourceTree = "<group>"; };
 		7068F6041A0A603800077FEC /* CDImageLabelTableCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = CDImageLabelTableCell.xib; sourceTree = "<group>"; };
+		7068F6071A0A838C00077FEC /* group_icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = group_icon.png; sourceTree = "<group>"; };
+		7068F60C1A0A85DC00077FEC /* CDGroupTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CDGroupTableViewController.h; sourceTree = "<group>"; };
+		7068F60D1A0A85DC00077FEC /* CDGroupTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CDGroupTableViewController.m; sourceTree = "<group>"; };
+		7068F60E1A0A85DC00077FEC /* CDGroupTableViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = CDGroupTableViewController.xib; sourceTree = "<group>"; };
+		7068F6111A0A878600077FEC /* GroupService.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GroupService.h; sourceTree = "<group>"; };
+		7068F6121A0A878600077FEC /* GroupService.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GroupService.m; sourceTree = "<group>"; };
+		7068F6141A0A89E300077FEC /* ChatGroup.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ChatGroup.h; sourceTree = "<group>"; };
+		7068F6151A0A89E300077FEC /* ChatGroup.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ChatGroup.m; sourceTree = "<group>"; };
 		8C05A0501981FEE4008B4CC6 /* CDChatListController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CDChatListController.h; sourceTree = "<group>"; };
 		8C05A0511981FEE4008B4CC6 /* CDChatListController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CDChatListController.m; sourceTree = "<group>"; };
 		8C470C5B199257E3006A4E87 /* libZXingWidget.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libZXingWidget.a; sourceTree = "<group>"; };
@@ -317,6 +325,8 @@
 				701C828A19F9623A0086443F /* CloudService.m */,
 				701C828F19F96D850086443F /* Utils.h */,
 				701C829019F96D850086443F /* Utils.m */,
+				7068F6111A0A878600077FEC /* GroupService.h */,
+				7068F6121A0A878600077FEC /* GroupService.m */,
 			);
 			name = service;
 			path = controllers/service;
@@ -345,8 +355,20 @@
 				7068F5E91A09F5E200077FEC /* AddRequest.m */,
 				7068F5EA1A09F5E200077FEC /* User.h */,
 				7068F5EB1A09F5E200077FEC /* User.m */,
+				7068F6141A0A89E300077FEC /* ChatGroup.h */,
+				7068F6151A0A89E300077FEC /* ChatGroup.m */,
 			);
 			path = avobject;
+			sourceTree = "<group>";
+		};
+		7068F60B1A0A85DC00077FEC /* group */ = {
+			isa = PBXGroup;
+			children = (
+				7068F60C1A0A85DC00077FEC /* CDGroupTableViewController.h */,
+				7068F60D1A0A85DC00077FEC /* CDGroupTableViewController.m */,
+				7068F60E1A0A85DC00077FEC /* CDGroupTableViewController.xib */,
+			);
+			path = group;
 			sourceTree = "<group>";
 		};
 		8C05A04B1981FEA3008B4CC6 /* chat */ = {
@@ -490,9 +512,6 @@
 				8CA0553819851199002DA6A1 /* CDContactListController.h */,
 				8CA0553919851199002DA6A1 /* CDContactListController.m */,
 				701C827319F932F50086443F /* CDContactListController.xib */,
-				70011B391A072205000DD399 /* CDGroupListController.h */,
-				70011B3A1A072205000DD399 /* CDGroupListController.m */,
-				70011B3E1A07278B000DD399 /* CDGroupListController.xib */,
 			);
 			path = contact;
 			sourceTree = "<group>";
@@ -524,6 +543,7 @@
 		8CB308181980BABB00BDC34D /* controllers */ = {
 			isa = PBXGroup;
 			children = (
+				7068F60B1A0A85DC00077FEC /* group */,
 				8CB3082D1980E67700BDC34D /* base */,
 				8C05A04B1981FEA3008B4CC6 /* chat */,
 				8CA0553319851172002DA6A1 /* contact */,
@@ -562,6 +582,7 @@
 		8CB3083F1980E9FD00BDC34D /* resources */ = {
 			isa = PBXGroup;
 			children = (
+				7068F6071A0A838C00077FEC /* group_icon.png */,
 				7068F6001A0A1B2000077FEC /* AppIcon60x60@2x.png */,
 				7068F5E41A09F4FA00077FEC /* avatar */,
 				7068F5E11A09F4EF00077FEC /* contact */,
@@ -797,10 +818,11 @@
 				8CA0554319851E28002DA6A1 /* wechat@2x.png in Resources */,
 				8C76A193199372E800709CE4 /* Icon@2x.png in Resources */,
 				8CB3084E1980F69F00BDC34D /* login@2x.png in Resources */,
-				70011B3F1A07278B000DD399 /* CDGroupListController.xib in Resources */,
+				7068F6081A0A838C00077FEC /* group_icon.png in Resources */,
 				8CB3086D198111FC00BDC34D /* cancel@2x.png in Resources */,
 				8C76C2631988B7EA000940E1 /* menu_background@2x.png in Resources */,
 				8C9D2DD519CB2CAF007EA70D /* image_placeholder@2x.png in Resources */,
+				7068F6101A0A85DC00077FEC /* CDGroupTableViewController.xib in Resources */,
 				8C76C26119889E2B000940E1 /* menu_add_voip@2x.png in Resources */,
 				8CA0554219851E28002DA6A1 /* sns@2x.png in Resources */,
 				8C76C25D19889E2B000940E1 /* menu_add_friend@2x.png in Resources */,
@@ -877,6 +899,7 @@
 				8C78145219CABA2600A6AFB3 /* QBAssetsCollectionViewCell.m in Sources */,
 				7068F5EC1A09F5E200077FEC /* AddRequest.m in Sources */,
 				7068F5FC1A0A110200077FEC /* CDNewFriendTableViewController.m in Sources */,
+				7068F60F1A0A85DC00077FEC /* CDGroupTableViewController.m in Sources */,
 				8CACCFE21986676100E9DE40 /* CDChatRoomController.m in Sources */,
 				8C925CB31987991000D2750B /* FMDatabasePool.m in Sources */,
 				8C470CB8199264B0006A4E87 /* CDChatDetailController.mm in Sources */,
@@ -895,13 +918,13 @@
 				8C05A0521981FEE4008B4CC6 /* CDChatListController.m in Sources */,
 				7068F5F71A0A10D100077FEC /* CDUserInfoController.m in Sources */,
 				7068F5F31A09F5F800077FEC /* UserService.m in Sources */,
-				70011B3B1A072205000DD399 /* CDGroupListController.m in Sources */,
 				8CACCFDE19865C0C00E9DE40 /* CDProfileController.m in Sources */,
 				8C470CB11992625B006A4E87 /* QREncoder.mm in Sources */,
 				8C76C24B19888CFB000940E1 /* CDPopMenuItem.m in Sources */,
 				8C78145019CABA2600A6AFB3 /* QBAssetsCollectionOverlayView.m in Sources */,
 				8C9D2DDC19CB49F0007EA70D /* UIImage+Resize.m in Sources */,
 				8CA0553A19851199002DA6A1 /* CDContactListController.m in Sources */,
+				7068F6131A0A878600077FEC /* GroupService.m in Sources */,
 				701C826D19F92CD00086443F /* CDAddFriendController.m in Sources */,
 				8C925CB21987991000D2750B /* FMDatabaseAdditions.m in Sources */,
 				8C78144F19CABA2600A6AFB3 /* QBAssetsCollectionFooterView.m in Sources */,
@@ -911,6 +934,7 @@
 				8C78145719CABA2600A6AFB3 /* QBImagePickerThumbnailView.m in Sources */,
 				8C78145319CABA2600A6AFB3 /* QBAssetsCollectionViewController.m in Sources */,
 				8CB3086719810F0B00BDC34D /* CDRegisterController.m in Sources */,
+				7068F6161A0A89E300077FEC /* ChatGroup.m in Sources */,
 				8C925CB41987991000D2750B /* FMDatabaseQueue.m in Sources */,
 				8C78145519CABA2600A6AFB3 /* QBImagePickerController.m in Sources */,
 				8C76C255198890D0000940E1 /* CDPopMenuItemCell.m in Sources */,

@@ -15,6 +15,7 @@
 #import "CDUserInfoController.h"
 #import "CDSessionManager.h"
 #import "CDImageLabelTableCell.h"
+#import "CDGroupTableViewController.h"
 
 enum : NSUInteger {
     kTagNameLabel = 10000,
@@ -23,7 +24,8 @@ enum : NSUInteger {
 
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
 @property (nonatomic, strong) NSMutableArray *users;
-@property (weak, nonatomic) IBOutlet UIView *headerView;
+@property (weak, nonatomic) IBOutlet UIView *myNewFriendView;
+@property (weak, nonatomic) IBOutlet UIView *groupView;
 
 @end
 
@@ -45,13 +47,20 @@ enum : NSUInteger {
     self.tableView.dataSource=self;
     
     UITapGestureRecognizer *singleTap=[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(goNewFriend:)];
-    [self.headerView addGestureRecognizer:singleTap];
+    [self.myNewFriendView addGestureRecognizer:singleTap];
     
+    singleTap=[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(goGroup:)];
+    [self.groupView addGestureRecognizer:singleTap];
     //[self.myNewFriendView addGestureRecognizer:singleTap];
 }
 
--(void)goNewFriend:(UIView*)sender{
+-(void)goNewFriend:(id)sender{
     CDNewFriendTableViewController *controller=[[CDNewFriendTableViewController alloc] init];
+    [[self navigationController] pushViewController:controller animated:YES];
+}
+
+-(void)goGroup:(id)sender{
+    CDGroupTableViewController *controller=[[CDGroupTableViewController alloc] init];
     [[self navigationController] pushViewController:controller animated:YES];
 }
 

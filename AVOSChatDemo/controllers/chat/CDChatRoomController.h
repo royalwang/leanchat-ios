@@ -9,6 +9,7 @@
 #import "CDCommon.h"
 #import "JSQMessages.h"
 #import "CDSessionManager.h"
+#import "ChatGroup.h"
 
 @class CDChatRoomController;
 
@@ -17,6 +18,8 @@
 
 @property (nonatomic, strong) User *chatUser;
 @property (nonatomic) CDMsgRoomType type;
+@property (nonatomic,strong) ChatGroup* chatGroup;
+
 @property (nonatomic, strong) AVGroup *group;
 
 @property (strong, nonatomic) JSQMessagesBubbleImage *outgoingBubbleImageData;

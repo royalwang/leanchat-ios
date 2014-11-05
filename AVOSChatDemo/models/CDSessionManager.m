@@ -158,7 +158,7 @@ static NSString *messagesTableSQL=@"create table if not exists messages (id inte
     AVGroup *group = [AVGroup getGroupWithGroupId:groupId session:_session];
     group.delegate = self;
     [group join];
-    return [AVGroup getGroupWithGroupId:groupId session:_session];;
+    return group;
 }
 
 - (void)startNewGroup:(AVGroupResultBlock)callback {
@@ -229,6 +229,7 @@ static NSString *messagesTableSQL=@"create table if not exists messages (id inte
         msg.roomType=CDMsgRoomTypeSingle;
     }else{
         msg.roomType=CDMsgRoomTypeGroup;
+        msg.toPeerId=@"";
     }
     msg.convid=[CDSessionManager getConvid:msg.roomType otherId:msg.toPeerId groupId:group.groupId];
     msg.objectId=objectId;
@@ -388,7 +389,7 @@ static NSString *messagesTableSQL=@"create table if not exists messages (id inte
     NSLog(@"send response msg");
 }
 
--(void)dealReceiveMessage:(AVMessage*)avMsg group:(AVGroup*)group{
+-(void)didReceiveMessage:(AVMessage*)avMsg group:(AVGroup*)group{
     NSLog(@"%s",__PRETTY_FUNCTION__);
     NSLog(@"payload=%@",avMsg.payload);
     Msg* msg=[Msg fromAVMessage:avMsg];
@@ -448,7 +449,7 @@ static NSString *messagesTableSQL=@"create table if not exists messages (id inte
 
 #pragma session delegate
 - (void)session:(AVSession *)session didReceiveMessage:(AVMessage *)message {
-    [self dealReceiveMessage:message group:nil];
+    [self didReceiveMessage:message group:nil];
 }
 
 - (void)session:(AVSession *)session messageSendFailed:(AVMessage *)message error:(NSError *)error {
@@ -475,7 +476,7 @@ static NSString *messagesTableSQL=@"create table if not exists messages (id inte
 
 #pragma mark - AVGroupDelegate
 - (void)group:(AVGroup *)group didReceiveMessage:(AVMessage *)message {
-    [self dealReceiveMessage:message group:group];
+    [self didReceiveMessage:message group:group];
     //[[NSNotificationCenter defaultCenter] postNotificationName:NOTIFICATION_SESSION_UPDATED object:group.session userInfo:nil];
 
 }
@@ -486,6 +487,7 @@ static NSString *messagesTableSQL=@"create table if not exists messages (id inte
 }
 
 - (void)group:(AVGroup *)group messageSendFinished:(AVMessage *)message {
+    [self messageSendFinish:message group:group];
     NSLog(@"%s", __PRETTY_FUNCTION__);
     NSLog(@"group:%@ message:%@", group.groupId, message.payload);
 }
