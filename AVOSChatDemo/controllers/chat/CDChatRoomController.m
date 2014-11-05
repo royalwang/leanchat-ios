@@ -12,6 +12,7 @@
 #import "QBImagePickerController.h"
 #import "UIImage+Resize.h"
 #import "Utils.h"
+#import <SDWebImage/UIImageView+WebCache.h>
 
 @interface CDChatRoomController () <QBImagePickerControllerDelegate, UIImagePickerControllerDelegate,UINavigationControllerDelegate> {
     NSMutableDictionary *_loadedData;
@@ -51,8 +52,9 @@
     self.senderId = curUser.objectId;
     self.senderDisplayName = curUser.username;
     
-    self.collectionView.collectionViewLayout.incomingAvatarViewSize = CGSizeZero;
-    self.collectionView.collectionViewLayout.outgoingAvatarViewSize = CGSizeZero;
+    CGSize avatarSize=CGSizeMake(30, 30);
+    self.collectionView.collectionViewLayout.incomingAvatarViewSize = avatarSize;
+    self.collectionView.collectionViewLayout.outgoingAvatarViewSize = avatarSize;
     
     
     //self.showLoadEarlierMessagesHeader = YES;
@@ -121,6 +123,26 @@
     return nil;
 }
 
+-(UIImage*)getAvatarByMsg:(Msg*)msg{
+    __block UIImage* avatar=[_loadedData objectForKey:msg.fromPeerId];
+    if(avatar){
+        return avatar;
+    }else{
+        User* user=[sessionManager lookupUser:msg.fromPeerId];
+        SDWebImageManager* man=[SDWebImageManager sharedManager];
+        AVFile* avatarFile=[user objectForKey:@"avatar"];
+        [man downloadImageWithURL:[NSURL URLWithString:[avatarFile url]] options:0 progress:nil completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, BOOL finished, NSURL *imageURL) {
+            if(error){
+                [Utils alertError:error];
+            }else{
+                [_loadedData setObject:image forKey:msg.fromPeerId];
+            }
+            avatar=image;
+        }];
+    }
+    return avatar;
+}
+
 -(void)keyboardDidShow:(id)sender{
     NSLog(@"show");
 }
@@ -147,8 +169,15 @@
     NSString* convid=[CDSessionManager getConvid:self.type otherId:self.chatUser.objectId groupId:self.group.groupId];
     NSMutableArray *messages  = [[sessionManager getMsgsForConvid:convid] mutableCopy];
     _messages=messages;
-    [self.collectionView reloadData];
-    [self scrollToBottomAnimated:YES];
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+        for(Msg* msg in messages){
+            [self getAvatarByMsg:msg];
+        }
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [self.collectionView reloadData];
+            [self scrollToBottomAnimated:YES];
+        });
+    });
 }
 
 - (void)sessionUpdated:(NSNotification *)notification {
@@ -559,18 +588,9 @@
      *
      *  Override the defaults in `viewDidLoad`
      */
-    
-    JSQMessage* jsqMessage=[self getJSQMessageAtPos:indexPath.row];
-    
-    if ([jsqMessage.senderId isEqualToString:self.senderId]) {
-        return nil;
-    }
-    else {
-        return nil;
-    }
-    
-    
-    return nil;
+    Msg* msg=[_messages objectAtIndex:indexPath.row];
+    JSQMessagesAvatarImage* avatar=[JSQMessagesAvatarImage avatarWithImage:[self getAvatarByMsg:msg]];
+    return avatar;
 }
 
 - (NSAttributedString *)collectionView:(JSQMessagesCollectionView *)collectionView attributedTextForCellTopLabelAtIndexPath:(NSIndexPath *)indexPath
