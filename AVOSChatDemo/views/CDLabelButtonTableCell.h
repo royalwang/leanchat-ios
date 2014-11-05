@@ -8,7 +8,7 @@
 
 #import <UIKit/UIKit.h>
 
-@interface CDNewFriendTableCell : UITableViewCell
+@interface CDLabelButtonTableCell : UITableViewCell
 @property (weak, nonatomic) IBOutlet UILabel *nameLabel;
 
 @property (weak, nonatomic) IBOutlet UIButton *actionBtn;

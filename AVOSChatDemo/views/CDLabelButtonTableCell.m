@@ -6,9 +6,9 @@
 //  Copyright (c) 2014年 AVOS. All rights reserved.
 //
 
-#import "CDNewFriendTableCell.h"
+#import "CDLabelButtonTableCell.h"
 
-@implementation CDNewFriendTableCell
+@implementation CDLabelButtonTableCell
 
 - (void)awakeFromNib
 {

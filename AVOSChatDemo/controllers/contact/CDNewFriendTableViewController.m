@@ -8,7 +8,7 @@
 
 #import "CDNewFriendTableViewController.h"
 #import "AddRequestService.h"
-#import "CDNewFriendTableCell.h"
+#import "CDLabelButtonTableCell.h"
 #import "CloudService.h"
 #import "Utils.h"
 
@@ -69,9 +69,9 @@
 {
     static BOOL isRegNib=NO;
     if(!isRegNib){
-        [tableView registerNib:[UINib nibWithNibName:@"CDNewFriendTableCell" bundle:nil]forCellReuseIdentifier:@"cell"];
+        [tableView registerNib:[UINib nibWithNibName:@"CDLabelButtonTableCell" bundle:nil]forCellReuseIdentifier:@"cell"];
     }
-    CDNewFriendTableCell* cell = [tableView dequeueReusableCellWithIdentifier:@"cell" ];
+    CDLabelButtonTableCell* cell = [tableView dequeueReusableCellWithIdentifier:@"cell" ];
     AddRequest* addRequest=[addRequests objectAtIndex:indexPath.row];
     cell.nameLabel.text=addRequest.fromUser.username;
     if(addRequest.status==kAddRequestStatusWait){

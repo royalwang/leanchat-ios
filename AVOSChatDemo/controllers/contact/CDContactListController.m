@@ -14,6 +14,7 @@
 #import "CDNewFriendTableViewController.h"
 #import "CDUserInfoController.h"
 #import "CDSessionManager.h"
+#import "CDImageLabelTableCell.h"
 
 enum : NSUInteger {
     kTagNameLabel = 10000,
@@ -88,22 +89,23 @@ enum : NSUInteger {
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     static NSString *cellIdentifier = @"ContactCell";
-    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:cellIdentifier];
+    static BOOL isRegisterNib=NO;
+    if(isRegisterNib==NO){
+        [tableView registerNib:[UINib nibWithNibName:@"CDImageLabelTableCell" bundle:nil]
+          forCellReuseIdentifier:cellIdentifier];
+    }
+    CDImageLabelTableCell *cell = [tableView dequeueReusableCellWithIdentifier:cellIdentifier];
     if (!cell) {
-        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellIdentifier];
-        UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(10, 5, 100, 30)];
-        label.font = [UIFont systemFontOfSize:14];
-        label.tag = kTagNameLabel;
-        label.textColor = [UIColor redColor];
-        [cell.contentView addSubview:label];
+        cell = [[CDImageLabelTableCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellIdentifier];
     }
     return cell;
 }
 
 - (void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath {
+    CDImageLabelTableCell* tableCell=(CDImageLabelTableCell*)cell;
     User *user = [self.users objectAtIndex:indexPath.row];
-    UILabel *label = (UILabel *)[cell.contentView viewWithTag:kTagNameLabel];
-    label.text = user.username;
+    [UserService displayAvatar:user avatarView:tableCell.imageView];
+    tableCell.label.text = user.username;
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
