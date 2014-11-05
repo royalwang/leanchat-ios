@@ -22,8 +22,9 @@ enum : NSUInteger {
 @interface CDContactListController ()
 
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
-@property (weak, nonatomic) IBOutlet UIButton *myNewFriendBtn;
 @property (nonatomic, strong) NSMutableArray *users;
+@property (weak, nonatomic) IBOutlet UIView *headerView;
+
 @end
 
 @implementation CDContactListController
@@ -42,7 +43,11 @@ enum : NSUInteger {
                                             target:self action:@selector(goAddFriend:)];
     self.tableView.delegate=self;
     self.tableView.dataSource=self;
-    [self.myNewFriendBtn addTarget:self action:@selector(goNewFriend:) forControlEvents:UIControlEventTouchUpInside];
+    
+    UITapGestureRecognizer *singleTap=[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(goNewFriend:)];
+    [self.headerView addGestureRecognizer:singleTap];
+    
+    //[self.myNewFriendView addGestureRecognizer:singleTap];
 }
 
 -(void)goNewFriend:(UIView*)sender{
@@ -104,8 +109,8 @@ enum : NSUInteger {
 - (void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath {
     CDImageLabelTableCell* tableCell=(CDImageLabelTableCell*)cell;
     User *user = [self.users objectAtIndex:indexPath.row];
-    [UserService displayAvatar:user avatarView:tableCell.imageView];
-    tableCell.label.text = user.username;
+    [UserService displayAvatar:user avatarView:tableCell.myImageView];
+    tableCell.myLabel.text = user.username;
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
@@ -113,5 +118,6 @@ enum : NSUInteger {
     CDUserInfoController *controller=[[CDUserInfoController alloc] initWithUser:user];
     [self.navigationController pushViewController:controller animated:YES];
 }
+
 
 @end

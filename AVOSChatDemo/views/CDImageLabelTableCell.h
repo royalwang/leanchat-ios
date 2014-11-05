@@ -9,7 +9,9 @@
 #import <UIKit/UIKit.h>
 
 @interface CDImageLabelTableCell : UITableViewCell
-@property (weak, nonatomic) IBOutlet UIImageView *imageView;
-@property (weak, nonatomic) IBOutlet UILabel *label;
+
+@property (weak, nonatomic) IBOutlet UILabel *myLabel;
+
+@property (weak, nonatomic) IBOutlet UIImageView *myImageView;
 
 @end

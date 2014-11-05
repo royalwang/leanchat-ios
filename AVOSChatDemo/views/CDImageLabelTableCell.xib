@@ -15,19 +15,19 @@
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Label" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="39h-Bk-Cfg">
-                        <rect key="frame" x="103" y="8" width="182" height="28"/>
+                        <rect key="frame" x="56" y="8" width="182" height="28"/>
                         <fontDescription key="fontDescription" type="system" pointSize="17"/>
                         <color key="textColor" red="1" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                         <nil key="highlightedColor"/>
                     </label>
-                    <imageView autoresizesSubviews="NO" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="image_placeholder.png" translatesAutoresizingMaskIntoConstraints="NO" id="iwE-1W-Cgt">
-                        <rect key="frame" x="31" y="6" width="30" height="30"/>
+                    <imageView autoresizesSubviews="NO" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="image_placeholder.png" translatesAutoresizingMaskIntoConstraints="NO" id="iwE-1W-Cgt">
+                        <rect key="frame" x="18" y="8" width="30" height="30"/>
                     </imageView>
                 </subviews>
             </tableViewCellContentView>
             <connections>
-                <outlet property="imageView" destination="iwE-1W-Cgt" id="cEZ-O5-jIo"/>
-                <outlet property="label" destination="39h-Bk-Cfg" id="Tbw-jK-WXe"/>
+                <outlet property="myImageView" destination="iwE-1W-Cgt" id="upo-T9-nKW"/>
+                <outlet property="myLabel" destination="39h-Bk-Cfg" id="Lg6-uQ-CUu"/>
             </connections>
             <point key="canvasLocation" x="515" y="375"/>
         </tableViewCell>
