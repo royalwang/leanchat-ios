@@ -15,6 +15,7 @@
     AVQuery *q=[AddRequest query];
     [q includeKey:@"fromUser"];
     [q whereKey:@"toUser" equalTo:curUser];
+    [q orderByDescending:@"createdAt"];
     [q findObjectsInBackgroundWithBlock:callback];
 }
 @end

@@ -22,4 +22,9 @@
     [AVCloud callFunctionInBackground:@"tryCreateAddRequest" withParameters:dict block:callback];
 }
 
++(void)agreeAddRequest:(NSString*)objectId callback:(AVIdResultBlock)callback{
+    NSDictionary* dict=@{@"objectId":objectId};
+    [AVCloud callFunctionInBackground:@"agreeAddRequest" withParameters:dict block:callback];
+}
+
 @end

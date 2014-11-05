@@ -10,11 +10,13 @@
 #import "AddRequestService.h"
 #import "CDChatRoomController.h"
 #import "CloudService.h"
+#import <SDWebImage/UIImageView+WebCache.h>
 
 @interface CDUserInfoController (){
     BOOL isFriend;
 }
 
+@property (weak, nonatomic) IBOutlet UIImageView *avatarView;
 @property (weak, nonatomic) IBOutlet UILabel *nameLabel;
 @property (weak, nonatomic) IBOutlet UIButton *actionBtn;
 @end
@@ -23,7 +25,7 @@
 
 -(instancetype)initWithUser:(User*)user{
     if(self==[super init]){
-        _user=user;
+        _user=(User*)user;
     };
     return self;
 }
@@ -51,6 +53,12 @@
         [_actionBtn setTitle:@"开始聊天" forState:UIControlStateNormal];
     }else{
         [_actionBtn setTitle:@"添加好友" forState:UIControlStateNormal];
+    }
+    
+    AVFile* avatar=[_user objectForKey:@"avatar"];
+    
+    if(avatar){
+        [self.avatarView setImageWithURL:[NSURL URLWithString:avatar.url] placeholderImage:[UIImage imageNamed:@"default_user_avatar"]];
     }
 }
 

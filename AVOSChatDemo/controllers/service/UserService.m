@@ -7,6 +7,7 @@
 //
 
 #import "UserService.h"
+#import <SDWebImage/UIImageView+WebCache.h>
 
 @implementation UserService
 
@@ -41,4 +42,10 @@
     [q findObjectsInBackgroundWithBlock:callback];
 }
 
++(void)displayAvatar:(User*)user avatarView:(UIImageView*)avatarView{
+    AVFile* avatar=[user objectForKey:@"avatar"];
+    if(avatar){
+        [avatarView setImageWithURL:[NSURL URLWithString:avatar.url] placeholderImage:[UIImage imageNamed:@"default_user_avatar"]];
+    }
+}
 @end

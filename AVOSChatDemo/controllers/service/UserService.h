@@ -15,4 +15,5 @@
 +(void)findUsers:(NSString*)partName withBlock:(AVArrayResultBlock)block;
 +(NSString*)getPeerId:(User*)user;
 +(void)findUsers:(NSArray*)userIds callback:(AVArrayResultBlock)callback;
++(void)displayAvatar:(User*)user avatarView:(UIImageView*)avatarView;
 @end

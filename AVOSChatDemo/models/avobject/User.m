@@ -11,6 +11,7 @@
 @implementation User
 
 @dynamic friends;
+@dynamic avatar;
 
 + (NSString *)parseClassName {
     return @"_User";
@@ -18,6 +19,13 @@
 
 +(NSString*)curUserId{
     return [User currentUser].objectId;
+}
+
+-(NSString*)getAvatarUrl{
+    if([self avatar]!=nil){
+        return [self avatar].url;
+    }
+    return nil;
 }
 
 @end

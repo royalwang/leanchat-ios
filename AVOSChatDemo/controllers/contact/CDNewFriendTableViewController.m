@@ -30,6 +30,11 @@
     // self.navigationItem.rightBarButtonItem = self.editButtonItem;
     //[self.tableView setDataSource:self];
     //[self.tableView setDelegate:self];
+    self.title=@"新的朋友";
+    [self refresh];
+}
+
+-(void)refresh{
     [AddRequestService findAddRequests:^(NSArray *objects, NSError *error) {
         if(error){
             [Utils alert:[error description]];
@@ -38,7 +43,6 @@
             [self.tableView reloadData];
         }
     }];
-    self.title=@"新的朋友";
 }
 
 - (void)didReceiveMemoryWarning
@@ -88,20 +92,12 @@
 -(void)actionBtnClicked:(id)sender{
     UIButton *btn=(UIButton*)sender;
     AddRequest* addRequest=[addRequests objectAtIndex:btn.tag];
-    User* curUser=[User currentUser];
-    [CloudService callCloudRelationFn:curUser toUser:addRequest.fromUser action:kAddFriendFnName callback:^(id object, NSError *error) {
+    [CloudService agreeAddRequest:addRequest.objectId callback:^(id object, NSError *error) {
         if(error){
             [Utils alert:[error localizedDescription]];
         }else{
-            [addRequest setValue:@(kAddRequestStatusDone) forKey:@"status"];
-            [addRequest saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
-                if(error){
-                    [Utils alert:[error localizedDescription]];
-                }else{
-                    [Utils alert:@"添加成功"];
-                    [self.tableView reloadData];
-                }
-            }];
+            [Utils alert:@"添加成功"];
+            [self refresh];
         }
     }];
 }

@@ -11,9 +11,14 @@
 #import "CDLoginController.h"
 #import "CDAppDelegate.h"
 #import "CDSessionManager.h"
+#import "ResizableButton.h"
 
 @interface CDProfileController ()
-@property (nonatomic, strong) UILabel *nameLabel;
+
+@property (weak, nonatomic) IBOutlet UILabel *nameLabel;
+@property (weak, nonatomic) IBOutlet UIImageView *avatarView;
+@property (weak, nonatomic) IBOutlet ResizableButton *logoutBtn;
+
 @end
 
 @implementation CDProfileController
@@ -28,42 +33,14 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    CGRect rect = self.view.frame;
-    CGFloat originX = rect.size.width/2 - 150;
-    CGFloat originY = 40;
-    CGFloat width = 300;
-    CGFloat height = 40;
-    
-    UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(originX, originY, width, height)];
-    label.font = [UIFont systemFontOfSize:24];
-    label.textColor = [UIColor greenColor];
-    label.textAlignment = NSTextAlignmentCenter;
-    [self.view addSubview:label];
-    self.nameLabel = label;
-    
-    originY += 80;
-    UIImage *image = [[UIImage imageNamed:@"blue_expand_normal"] resizableImageWithCapInsets:UIEdgeInsetsMake(5, 5, 5, 5)];
-    UIButton *button = [UIButton buttonWithType:UIButtonTypeCustom];
-    button.frame = CGRectMake(originX, originY, width, height);
-    [button setBackgroundImage:image forState:UIControlStateNormal];
-    image = [[UIImage imageNamed:@"blue_expand_highlight"] resizableImageWithCapInsets:UIEdgeInsetsMake(5, 5, 5, 5)];
-    [button setBackgroundImage:image forState:UIControlStateHighlighted];
-    image = [[UIImage imageNamed:@"blue_expand_highlight"] resizableImageWithCapInsets:UIEdgeInsetsMake(5, 5, 5, 5)];
-    [button setBackgroundImage:image forState:UIControlStateDisabled];
-    [button setTitle:@"退出登录" forState:UIControlStateNormal];
-    [button setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
-    [button addTarget:self action:@selector(logout:) forControlEvents:UIControlEventTouchUpInside];
-    [self.view addSubview:button];
-}
-
-- (void)viewWillAppear:(BOOL)animated {
-    [super viewWillAppear:animated];
-    AVUser *user = [AVUser currentUser];
+    User *user = [User currentUser];
     NSString *username = [user username];
-    if ([[AVUser currentUser] mobilePhoneVerified]) {
+    if ([[User currentUser] mobilePhoneVerified]) {
         username = [NSString stringWithFormat:@"%@(%@)", username, [user mobilePhoneNumber]];
     }
     self.nameLabel.text = username;
+    [self.logoutBtn addTarget:self action:@selector(logout:) forControlEvents:UIControlEventTouchUpInside];
+    [UserService displayAvatar:user avatarView:self.avatarView];
 }
 
 - (void)didReceiveMemoryWarning {

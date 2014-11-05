@@ -16,5 +16,6 @@ static NSString *kRemoveFriendFnName=@"removeFriend";
 
 +(void)callCloudRelationFn:(User*)fromUser toUser:(User*)toUser action:(NSString*)action callback:(AVIdResultBlock)callback;
 +(void)tryCreateAddRequest:(User*)toUser callback:(AVIdResultBlock)callback;
++(void)agreeAddRequest:(NSString*)objectId callback:(AVIdResultBlock)callback;
 
 @end

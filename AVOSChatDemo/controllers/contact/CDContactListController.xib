@@ -23,21 +23,46 @@
                         <navigationItem title="Title" id="CUz-Rc-eII"/>
                     </items>
                 </navigationBar>
-                <tableView clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" alwaysBounceVertical="YES" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" translatesAutoresizingMaskIntoConstraints="NO" id="2WW-ht-IE3">
-                    <rect key="frame" x="0.0" y="152" width="320" height="362"/>
+                <view contentMode="scaleToFill" ambiguous="YES" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="O4a-Ti-Rrt" userLabel="new_friend_container">
+                    <rect key="frame" x="0.0" y="61" width="320" height="44"/>
+                    <subviews>
+                        <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="new_friends_icon" translatesAutoresizingMaskIntoConstraints="NO" id="Cxa-bj-G8o">
+                            <rect key="frame" x="21" y="13" width="34" height="31"/>
+                        </imageView>
+                        <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="v3T-nm-enj">
+                            <rect key="frame" x="54" y="18" width="79" height="22"/>
+                            <fontDescription key="fontDescription" type="system" pointSize="16"/>
+                            <state key="normal" title="新的朋友">
+                                <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                            </state>
+                        </button>
+                    </subviews>
                     <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                    <constraints>
+                        <constraint firstAttribute="width" constant="320" id="7Ca-wn-aXc"/>
+                        <constraint firstAttribute="height" constant="44" id="SI7-U5-jez"/>
+                    </constraints>
+                </view>
+                <tableView clipsSubviews="YES" contentMode="scaleToFill" ambiguous="YES" misplaced="YES" alwaysBounceVertical="YES" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="1" sectionFooterHeight="1" translatesAutoresizingMaskIntoConstraints="NO" id="2WW-ht-IE3">
+                    <rect key="frame" x="0.0" y="137" width="319" height="431"/>
+                    <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="431" id="Kdg-qc-Eog"/>
+                        <constraint firstAttribute="width" constant="319" id="hnf-Oh-5lv"/>
+                    </constraints>
                 </tableView>
-                <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="v3T-nm-enj">
-                    <rect key="frame" x="27" y="85" width="257" height="22"/>
-                    <state key="normal" title="新的朋友">
-                        <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
-                    </state>
-                </button>
             </subviews>
             <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
-            <point key="canvasLocation" x="264" y="364"/>
+            <constraints>
+                <constraint firstItem="2WW-ht-IE3" firstAttribute="top" secondItem="O4a-Ti-Rrt" secondAttribute="bottom" constant="32" id="9NQ-Gb-nwx"/>
+                <constraint firstAttribute="centerX" secondItem="2WW-ht-IE3" secondAttribute="centerX" id="Kg1-mk-MPn"/>
+            </constraints>
+            <point key="canvasLocation" x="274" y="438"/>
         </view>
     </objects>
+    <resources>
+        <image name="new_friends_icon" width="80" height="80"/>
+    </resources>
     <simulatedMetricsContainer key="defaultSimulatedMetrics">
         <simulatedStatusBarMetrics key="statusBar"/>
         <simulatedOrientationMetrics key="orientation"/>

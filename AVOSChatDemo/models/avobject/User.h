@@ -10,8 +10,10 @@
 
 @interface User : AVUser<AVSubclassing>
 
+@property (retain) AVFile *avatar;
 @property (retain) AVRelation *friends;
 
 +(NSString*)curUserId;
+-(NSString*)getAvatarUrl;
 
 @end

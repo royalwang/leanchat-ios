@@ -109,7 +109,8 @@ static NSString *messagesTableSQL=@"create table if not exists messages (id inte
 }
 
 -(void)findConversations:(AVArrayResultBlock)callback{
-    FMResultSet *rs = [_database executeQuery:@"select * from messages group by convid order by timestamp desc" ];
+    User* user=[User currentUser];
+    FMResultSet *rs = [_database executeQuery:@"select * from messages where ownerId=? group by convid order by timestamp desc" withArgumentsInArray:@[user.objectId]];
     NSArray *msgs=[self getMsgsByResultSet:rs];
     [self cacheMsgs:msgs callback:^(NSArray *objects, NSError *error) {
         if(error){
@@ -487,7 +488,6 @@ static NSString *messagesTableSQL=@"create table if not exists messages (id inte
 - (void)group:(AVGroup *)group messageSendFinished:(AVMessage *)message {
     NSLog(@"%s", __PRETTY_FUNCTION__);
     NSLog(@"group:%@ message:%@", group.groupId, message.payload);
-
 }
 
 - (void)group:(AVGroup *)group messageSendFailed:(AVMessage *)message error:(NSError *)error {

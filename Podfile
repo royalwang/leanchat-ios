@@ -7,5 +7,6 @@ target 'AVOSChatDemo' do
   pod 'JSQMessagesViewController'
 	pod 'AVOSCloud'
 	pod 'AVOSCloudUI'
+	pod 'SDWebImage'
 end
 
