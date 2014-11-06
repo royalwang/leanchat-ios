@@ -383,7 +383,7 @@ static NSString *messagesTableSQL=@"create table if not exists messages (id inte
     resMsg.convid=[CDSessionManager convid:msg.fromPeerId otherId:[User curUserId]];
     resMsg.roomType=CDMsgRoomTypeSingle;
     resMsg.status=CDMsgStatusSendStart;
-    resMsg.content=[NSString stringWithFormat:@"%lld",msg.timestamp];
+    resMsg.content=@"";
     resMsg.objectId=msg.objectId;
     [self sendMsg:nil msg:resMsg];
     NSLog(@"send response msg");
@@ -417,14 +417,14 @@ static NSString *messagesTableSQL=@"create table if not exists messages (id inte
             });
         });
     }else{
-        [self updateStatusAndTimestamp:msg];
+        msg.status=CDMsgStatusSendReceived;
+        [self updateStatus:msg];
         [self notifyMessageUpdate];
     }
 }
 
 -(void)updateStatusAndTimestamp:(Msg*)msg{
     NSLog(@"%s",__PRETTY_FUNCTION__);
-    msg.status=CDMsgStatusSendReceived;
     [self updateStatus:msg];
     [_database executeUpdate:@"update messages set timestamp=? where objectId=?" withArgumentsInArray:@[msg.content,msg.objectId]];
 }
@@ -436,7 +436,7 @@ static NSString *messagesTableSQL=@"create table if not exists messages (id inte
 -(void)messageSendFinish:(AVMessage*)avMsg group:(AVGroup*)group{
     Msg* msg=[Msg fromAVMessage:avMsg];
     msg.status=CDMsgStatusSendSucceed;
-    [self updateStatus:msg];
+    [self updateStatusAndTimestamp:msg];
     [self notifyMessageUpdate];
 }
 

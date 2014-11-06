@@ -140,6 +140,9 @@
             avatar=image;
         }];
     }
+    if(avatar==nil){
+        avatar=[UIImage imageNamed:@"default_user_avatar"];
+    }
     return avatar;
 }
 
@@ -169,11 +172,16 @@
     NSString* convid=[CDSessionManager getConvid:self.type otherId:self.chatUser.objectId groupId:self.group.groupId];
     NSMutableArray *messages  = [[sessionManager getMsgsForConvid:convid] mutableCopy];
     _messages=messages;
+    //UIApplication* app=[UIApplication sharedApplication];
+    //app.networkActivityIndicatorVisible=YES;
+    //[[self.toolbarItems objectAtIndex:0] addSubview:view];
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
         for(Msg* msg in messages){
             [self getAvatarByMsg:msg];
         }
         dispatch_async(dispatch_get_main_queue(), ^{
+            //app.networkActivityIndicatorVisible=NO;
+            //[indicator removeFromSuperview];
             [self.collectionView reloadData];
             [self scrollToBottomAnimated:YES];
         });
