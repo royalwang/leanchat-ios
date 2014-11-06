@@ -13,6 +13,7 @@
 #import "UIImage+Resize.h"
 #import "Utils.h"
 #import <SDWebImage/UIImageView+WebCache.h>
+#import "CDGroupDetailController.h"
 
 @interface CDChatRoomController () <QBImagePickerControllerDelegate, UIImagePickerControllerDelegate,UINavigationControllerDelegate> {
     NSMutableDictionary *_loadedData;
@@ -66,7 +67,15 @@
     
     self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemStop                                                                                          target:self                                                                                          action:@selector(backPressed:)];
     
-    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAdd target:self action:@selector(showDetail:)];
+    if(self.type==CDMsgRoomTypeGroup){
+        UIImage* peopleImage=[UIImage imageNamed:@"chat_menu_people"];
+        UIImage* _peopleImage=[Utils imageWithImage:peopleImage scaledToSize:CGSizeMake(25, 25)];
+        UIBarButtonItem* item=[[UIBarButtonItem alloc] initWithImage:_peopleImage style:UIBarButtonItemStyleDone target:self action:@selector(goChatGroupDetail:)];
+        self.navigationItem.rightBarButtonItem=item;
+    }
+    
+    //self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAdd target:self action:@selector(showDetail:)];
+
     
     if(self.type==CDMsgRoomTypeSingle){
         [sessionManager watchPeerId:self.chatUser.objectId];
@@ -150,15 +159,10 @@
     NSLog(@"show");
 }
 
-- (void)showDetail:(id)sender {
-    CDChatDetailController *controller = [[CDChatDetailController alloc] init];
-    controller.type = self.type;
-    if (self.type == CDMsgRoomTypeSingle) {
-        controller.otherId = self.chatUser.objectId;
-    } else if (self.type == CDMsgRoomTypeGroup) {
-        controller.otherId = self.group.groupId;
-    }
-    [self.navigationController pushViewController:controller animated:YES];
+- (void)goChatGroupDetail:(id)sender {
+    CDGroupDetailController *controller=[[CDGroupDetailController alloc] init];
+    controller.chatGroup=self.chatGroup;
+    [self.navigationController pushViewController: controller animated:YES];
 }
 
 #pragma mark - Table view data source
