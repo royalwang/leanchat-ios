@@ -27,4 +27,11 @@
     [AVCloud callFunctionInBackground:@"agreeAddRequest" withParameters:dict block:callback];
 }
 
++(void)saveChatGroup:(NSString*)groupId name:(NSString*)name callback:(AVIdResultBlock)callback{
+    NSString* userId=[User curUserId];
+    assert(userId!=nil);
+    NSDictionary* dict=@{@"groupId":groupId,@"ownerId":userId,@"name":name};
+    [AVCloud callFunctionInBackground:@"saveChatGroup" withParameters:dict block:callback];
+}
+
 @end

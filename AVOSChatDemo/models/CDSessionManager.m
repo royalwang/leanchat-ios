@@ -11,6 +11,7 @@
 #import "Msg.h"
 #import "ChatRoom.h"
 #import "Utils.h"
+#import "CloudService.h"
 
 @interface CDSessionManager () {
     FMDatabase *_database;
@@ -161,14 +162,14 @@ static NSString *messagesTableSQL=@"create table if not exists messages (id inte
     return group;
 }
 
-- (void)startNewGroup:(AVGroupResultBlock)callback {
+- (void)startNewGroup:(NSString*)name callback:(AVGroupResultBlock)callback {
     [AVGroup createGroupWithSession:_session groupDelegate:self callback:^(AVGroup *group, NSError *error) {
-        if (!error) {
-            if (callback) {
-                callback(group, error);
-            }
-        } else {
-            NSLog(@"error:%@", error);
+        if(error==nil){
+            [CloudService saveChatGroup:group.groupId name:name callback:^(id object, NSError *error) {
+                callback(group,error);
+            }];
+        }else{
+            callback(group,error);
         }
     }];
 }

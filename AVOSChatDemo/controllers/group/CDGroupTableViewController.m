@@ -10,6 +10,7 @@
 #import "ChatGroup.h"
 #import "GroupService.h"
 #import "CDChatRoomController.h"
+#import "CDNewGroupViewController.h"
 
 @interface CDGroupTableViewController (){
     NSArray* chatGroups;
@@ -27,10 +28,24 @@
     // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
     // self.navigationItem.rightBarButtonItem = self.editButtonItem;
     self.title=@"群组";
+    self.navigationItem.rightBarButtonItem=[[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAdd target:self action:@selector(goNewGroup)];
+}
+
+-(void)viewDidAppear:(BOOL)animated{
+    [self refresh];
+}
+
+-(void)refresh{
     [GroupService findGroups:^(NSArray *objects, NSError *error) {
         chatGroups=objects;
         [self.tableView reloadData];
     }];
+}
+
+-(void)goNewGroup{
+    CDNewGroupViewController* controller=[[CDNewGroupViewController alloc] init];
+    UINavigationController*nav =[[UINavigationController alloc] initWithRootViewController:controller];
+    [self presentViewController:nav animated:YES completion:nil];
 }
 
 - (void)didReceiveMemoryWarning {

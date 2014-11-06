@@ -23,7 +23,8 @@
 -(void)unwatchPeerId:(NSString*)peerId;
 
 - (AVGroup *)joinGroup:(NSString *)groupId;
-- (void)startNewGroup:(AVGroupResultBlock)callback;
+- (void)startNewGroup:(NSString*)name callback:(AVGroupResultBlock)callback ;
+
 - (void)sendMessage:(NSString *)content type:(CDMsgType)type toPeerId:(NSString *)toPeerId group:(AVGroup*)group;
 - (void)sendAttachment:(NSString*)objectId type:(CDMsgType)type toPeerId:(NSString *)toPeerId group:(AVGroup*)group;
 

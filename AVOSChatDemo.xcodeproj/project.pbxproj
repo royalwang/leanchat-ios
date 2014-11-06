@@ -36,6 +36,9 @@
 		7068F6101A0A85DC00077FEC /* CDGroupTableViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 7068F60E1A0A85DC00077FEC /* CDGroupTableViewController.xib */; };
 		7068F6131A0A878600077FEC /* GroupService.m in Sources */ = {isa = PBXBuildFile; fileRef = 7068F6121A0A878600077FEC /* GroupService.m */; };
 		7068F6161A0A89E300077FEC /* ChatGroup.m in Sources */ = {isa = PBXBuildFile; fileRef = 7068F6151A0A89E300077FEC /* ChatGroup.m */; };
+		708A2C971A0B4CFA00630A01 /* CDNewGroupViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 708A2C951A0B4CFA00630A01 /* CDNewGroupViewController.m */; };
+		708A2C981A0B4CFA00630A01 /* CDNewGroupViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 708A2C961A0B4CFA00630A01 /* CDNewGroupViewController.xib */; };
+		708A2C9B1A0B4E9100630A01 /* CDButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 708A2C9A1A0B4E9100630A01 /* CDButton.m */; };
 		8C05A0521981FEE4008B4CC6 /* CDChatListController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C05A0511981FEE4008B4CC6 /* CDChatListController.m */; };
 		8C470C9D19926019006A4E87 /* libiconv.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 8C470C9C19926019006A4E87 /* libiconv.dylib */; };
 		8C470CAF1992625B006A4E87 /* DataMatrix.mm in Sources */ = {isa = PBXBuildFile; fileRef = 8C470CAA1992625B006A4E87 /* DataMatrix.mm */; };
@@ -165,6 +168,11 @@
 		7068F6121A0A878600077FEC /* GroupService.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GroupService.m; sourceTree = "<group>"; };
 		7068F6141A0A89E300077FEC /* ChatGroup.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ChatGroup.h; sourceTree = "<group>"; };
 		7068F6151A0A89E300077FEC /* ChatGroup.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ChatGroup.m; sourceTree = "<group>"; };
+		708A2C941A0B4CFA00630A01 /* CDNewGroupViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CDNewGroupViewController.h; sourceTree = "<group>"; };
+		708A2C951A0B4CFA00630A01 /* CDNewGroupViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CDNewGroupViewController.m; sourceTree = "<group>"; };
+		708A2C961A0B4CFA00630A01 /* CDNewGroupViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = CDNewGroupViewController.xib; sourceTree = "<group>"; };
+		708A2C991A0B4E9100630A01 /* CDButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CDButton.h; sourceTree = "<group>"; };
+		708A2C9A1A0B4E9100630A01 /* CDButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CDButton.m; sourceTree = "<group>"; };
 		8C05A0501981FEE4008B4CC6 /* CDChatListController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CDChatListController.h; sourceTree = "<group>"; };
 		8C05A0511981FEE4008B4CC6 /* CDChatListController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CDChatListController.m; sourceTree = "<group>"; };
 		8C470C5B199257E3006A4E87 /* libZXingWidget.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libZXingWidget.a; sourceTree = "<group>"; };
@@ -367,6 +375,9 @@
 				7068F60C1A0A85DC00077FEC /* CDGroupTableViewController.h */,
 				7068F60D1A0A85DC00077FEC /* CDGroupTableViewController.m */,
 				7068F60E1A0A85DC00077FEC /* CDGroupTableViewController.xib */,
+				708A2C941A0B4CFA00630A01 /* CDNewGroupViewController.h */,
+				708A2C951A0B4CFA00630A01 /* CDNewGroupViewController.m */,
+				708A2C961A0B4CFA00630A01 /* CDNewGroupViewController.xib */,
 			);
 			path = group;
 			sourceTree = "<group>";
@@ -616,6 +627,8 @@
 				7068F6021A0A603800077FEC /* CDImageLabelTableCell.h */,
 				7068F6031A0A603800077FEC /* CDImageLabelTableCell.m */,
 				7068F6041A0A603800077FEC /* CDImageLabelTableCell.xib */,
+				708A2C991A0B4E9100630A01 /* CDButton.h */,
+				708A2C9A1A0B4E9100630A01 /* CDButton.m */,
 			);
 			path = views;
 			sourceTree = "<group>";
@@ -808,6 +821,7 @@
 				7068F5FF1A0A15B600077FEC /* CDProfileController.xib in Resources */,
 				8CB308421980E9FD00BDC34D /* input_bg_top@2x.png in Resources */,
 				7068F5E61A09F50C00077FEC /* default_user_avatar.png in Resources */,
+				708A2C981A0B4CFA00630A01 /* CDNewGroupViewController.xib in Resources */,
 				7068F5FD1A0A110200077FEC /* CDNewFriendTableViewController.xib in Resources */,
 				8CB308611981007F00BDC34D /* bottom_bar_separator@2x.png in Resources */,
 				7068F5E31A09F4EF00077FEC /* new_friends_icon.png in Resources */,
@@ -885,6 +899,7 @@
 			files = (
 				7068F5ED1A09F5E200077FEC /* User.m in Sources */,
 				8C78145419CABA2600A6AFB3 /* QBAssetsCollectionViewLayout.m in Sources */,
+				708A2C9B1A0B4E9100630A01 /* CDButton.m in Sources */,
 				8CB308471980EAE200BDC34D /* CDTextField.m in Sources */,
 				8CB3083E1980E73900BDC34D /* CDLoginController.m in Sources */,
 				8C78145619CABA2600A6AFB3 /* QBImagePickerGroupCell.m in Sources */,
@@ -917,6 +932,7 @@
 				8C76C25219888DD5000940E1 /* CDPopMenu.m in Sources */,
 				8C05A0521981FEE4008B4CC6 /* CDChatListController.m in Sources */,
 				7068F5F71A0A10D100077FEC /* CDUserInfoController.m in Sources */,
+				708A2C971A0B4CFA00630A01 /* CDNewGroupViewController.m in Sources */,
 				7068F5F31A09F5F800077FEC /* UserService.m in Sources */,
 				8CACCFDE19865C0C00E9DE40 /* CDProfileController.m in Sources */,
 				8C470CB11992625B006A4E87 /* QREncoder.mm in Sources */,

@@ -64,15 +64,7 @@ enum : NSUInteger {
 }
 
 - (void)addContactForGroup {
-    CDChatRoomController *controller = [[CDChatRoomController alloc] init];
-    [[CDSessionManager sharedInstance] startNewGroup:^(AVGroup *group, NSError *error) {
-        if(error){
-        }else{
-            controller.type = CDMsgRoomTypeGroup;
-            controller.group = group;
-            [self.navigationController pushViewController:controller animated:YES];
-        }
-    }];
+    
 }
 
 - (void)addScan {
