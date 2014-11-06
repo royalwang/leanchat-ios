@@ -426,7 +426,9 @@ static NSString *messagesTableSQL=@"create table if not exists messages (id inte
 -(void)updateStatusAndTimestamp:(Msg*)msg{
     NSLog(@"%s",__PRETTY_FUNCTION__);
     [self updateStatus:msg];
-    [_database executeUpdate:@"update messages set timestamp=? where objectId=?" withArgumentsInArray:@[msg.content,msg.objectId]];
+    NSString* timestamp=[NSString stringWithFormat:@"%lld",msg.timestamp];
+    NSLog(@"timestamp=%@",timestamp);
+    [_database executeUpdate:@"update messages set timestamp=? where objectId=?" withArgumentsInArray:@[timestamp,msg.objectId]];
 }
 
 -(void)updateStatus:(Msg*)msg{
@@ -435,9 +437,11 @@ static NSString *messagesTableSQL=@"create table if not exists messages (id inte
 
 -(void)messageSendFinish:(AVMessage*)avMsg group:(AVGroup*)group{
     Msg* msg=[Msg fromAVMessage:avMsg];
-    msg.status=CDMsgStatusSendSucceed;
-    [self updateStatusAndTimestamp:msg];
-    [self notifyMessageUpdate];
+    if(msg.type!=CDMsgTypeResponse){
+        msg.status=CDMsgStatusSendSucceed;
+        [self updateStatusAndTimestamp:msg];
+        [self notifyMessageUpdate];
+    }
 }
 
 -(void)messageSendFailure:(AVMessage*)avMsg group:(AVGroup*)group{
