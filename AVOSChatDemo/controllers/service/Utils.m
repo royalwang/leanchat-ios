@@ -34,4 +34,24 @@
     return output;
 }
 
++(UIActivityIndicatorView*)showIndicator:(UIView*)hookView{
+    UIActivityIndicatorView *indicator = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
+    indicator.center = CGPointMake(hookView.frame.size.width * 0.5, hookView.frame.size.height * 0.5-50);
+    [hookView addSubview:indicator];
+    [hookView bringSubviewToFront:indicator];
+    indicator.hidden=NO;
+    [indicator startAnimating];
+    return indicator;
+}
+
++(void)showNetworkIndicator{
+    UIApplication* app=[UIApplication sharedApplication];
+    app.networkActivityIndicatorVisible=YES;
+}
+
++(void)hideNetworkIndicator{
+    UIApplication* app=[UIApplication sharedApplication];
+    app.networkActivityIndicatorVisible=NO;
+}
+
 @end

@@ -12,4 +12,9 @@
 +(void)alert:(NSString*)msg;
 +(NSString*)md5:(NSString*)s;
 +(void)alertError:(NSError*)error;
+
++(UIActivityIndicatorView*)showIndicator:(UIView*)hookView;
+
++(void)showNetworkIndicator;
++(void)hideNetworkIndicator;
 @end

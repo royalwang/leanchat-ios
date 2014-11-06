@@ -16,6 +16,7 @@
 #import "CDSessionManager.h"
 #import "CDImageLabelTableCell.h"
 #import "CDGroupTableViewController.h"
+#import "Utils.h"
 
 enum : NSUInteger {
     kTagNameLabel = 10000,
@@ -80,7 +81,9 @@ enum : NSUInteger {
 }
 
 - (void)startFetchUserList {
+    [Utils showNetworkIndicator];
     [UserService findFriends:^(NSArray *objects, NSError *error) {
+        [Utils hideNetworkIndicator];
         if (objects) {
             self.users = [objects mutableCopy];
             CDSessionManager* sessionMan=[CDSessionManager sharedInstance];

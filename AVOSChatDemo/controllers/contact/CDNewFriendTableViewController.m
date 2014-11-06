@@ -11,6 +11,7 @@
 #import "CDLabelButtonTableCell.h"
 #import "CloudService.h"
 #import "Utils.h"
+#import "Utils.h"
 
 @interface CDNewFriendTableViewController (){
     NSArray *addRequests;
@@ -31,11 +32,17 @@
     //[self.tableView setDataSource:self];
     //[self.tableView setDelegate:self];
     self.title=@"新的朋友";
+}
+
+-(void)viewDidAppear:(BOOL)animated{
+    [super viewDidAppear:animated];
     [self refresh];
 }
 
 -(void)refresh{
+    UIActivityIndicatorView* indicator=[Utils showIndicator:self.view];
     [AddRequestService findAddRequests:^(NSArray *objects, NSError *error) {
+        [indicator stopAnimating];
         if(error){
             [Utils alert:[error description]];
         }else{
@@ -43,16 +50,6 @@
             [self.tableView reloadData];
         }
     }];
-}
-
--(void)viewDidAppear:(BOOL)animated{
-    [super viewDidAppear:animated];
-    UIActivityIndicatorView *indicator = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
-    indicator.center = CGPointMake(self.view.frame.size.width * 0.5, self.view.frame.size.height * 0.5-50);
-    [self.view addSubview:indicator];
-    [self.view bringSubviewToFront:indicator];
-    //indicator.hidden=NO;
-    [indicator startAnimating];
 }
 
 - (void)didReceiveMemoryWarning
