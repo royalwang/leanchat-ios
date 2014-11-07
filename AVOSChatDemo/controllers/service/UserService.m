@@ -36,10 +36,14 @@
 }
 
 +(void)findUsers:(NSArray*)userIds callback:(AVArrayResultBlock)callback{
-    AVQuery *q=[User query];
-    [q setCachePolicy:kAVCachePolicyNetworkElseCache];
-    [q whereKey:@"objectId" containedIn:userIds];
-    [q findObjectsInBackgroundWithBlock:callback];
+    if([userIds count]>0){
+        AVQuery *q=[User query];
+        [q setCachePolicy:kAVCachePolicyNetworkElseCache];
+        [q whereKey:@"objectId" containedIn:userIds];
+        [q findObjectsInBackgroundWithBlock:callback];
+    }else{
+        callback([[NSArray alloc] init],nil);
+    }
 }
 
 +(void)displayAvatar:(User*)user avatarView:(UIImageView*)avatarView{

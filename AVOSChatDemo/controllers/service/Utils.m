@@ -65,4 +65,12 @@
     return newImage;
 }
 
++(void)filterError:(NSError*)error callback:(CDBlock)callback{
+    if(error){
+        [Utils alertError:error];
+    }else{
+        callback();
+    }
+}
+
 @end

@@ -7,17 +7,21 @@
 //
 
 #import "CDGroupDetailController.h"
-#import "CDImageLabelCollectionViewCell.h"
+#import "CDImageLabelCollectionCell.h"
 #import "UserService.h"
+#import "CDSessionManager.h"
+#import "Utils.h"
 
 @interface CDGroupDetailController (){
-    NSArray* members;
+    NSArray* groupMembers;
+    CDSessionManager* sessionManager;
 }
 @end
 
 @implementation CDGroupDetailController
 
 static NSString * const reuseIdentifier = @"Cell";
+
 
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -27,9 +31,19 @@ static NSString * const reuseIdentifier = @"Cell";
     
     // Register cell classes
     self.title=[self.chatGroup getTitle];
-    [self.collectionView registerClass:[CDImageLabelCollectionViewCell class] forCellWithReuseIdentifier:reuseIdentifier];
+    NSString* nibName=NSStringFromClass([CDImageLabelCollectionCell class]);
+    NSLog(@"nibName=%@",nibName);
+    [self.collectionView registerNib:[UINib nibWithNibName:nibName bundle:nil]  forCellWithReuseIdentifier:reuseIdentifier];
+    self.collectionView.backgroundColor = [UIColor whiteColor];
     
-    members=self.chatGroup.m;
+    sessionManager=[CDSessionManager sharedInstance];
+    [sessionManager cacheUsersWithIds:self.chatGroup.m callback:^(NSArray *objects, NSError *error) {
+        [Utils filterError:error callback:^{
+            groupMembers=self.chatGroup.m;
+            [self.collectionView reloadData];
+        }];
+    }];
+
     // Do any additional setup after loading the view.
 }
 
@@ -50,25 +64,35 @@ static NSString * const reuseIdentifier = @"Cell";
 
 #pragma mark <UICollectionViewDataSource>
 
-- (NSInteger)numberOfSectionsInCollectionView:(UICollectionView *)collectionView {
-    return 1;
-}
-
-
 - (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section {
-    return [members count];
+    return [groupMembers count];
 }
+
 
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath {
-    CDImageLabelCollectionViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:reuseIdentifier forIndexPath:indexPath];
+    CDImageLabelCollectionCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:reuseIdentifier forIndexPath:indexPath];
+    int labelTag=1;
+    int imageTag=2;
     
-    User* user=[members objectAtIndex:indexPath.row];
+    NSString* userId=[groupMembers objectAtIndex:indexPath.row];
+    User* user=[sessionManager lookupUser:userId];
     
-    [UserService displayAvatar:user avatarView:cell.myImageView];
-    cell.myLabel.text=user.username;
-    // Configure the cell
+    UILabel* label=(UILabel*)[cell viewWithTag:labelTag];
+    UIImageView* imageView=(UIImageView*)[cell viewWithTag:imageTag];
     
+    [UserService displayAvatar:user avatarView:imageView];
+    label.text=user.username;
+    
+    
+    //[cell setBackgroundColor:[UIColor greenColor]];
+
+//    CDTestCollectionViewCell *cell=[collectionView dequeueReusableCellWithReuseIdentifier:reuseIdentifier forIndexPath:indexPath];
+//    [cell setBackgroundColor:[UIColor greenColor]];
     return cell;
+}
+
+- (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout*)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath{
+    return CGSizeMake(90, 90);
 }
 
 #pragma mark <UICollectionViewDelegate>

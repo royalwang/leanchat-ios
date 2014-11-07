@@ -90,22 +90,28 @@ static NSString *messagesTableSQL=@"create table if not exists messages (id inte
 }
 
 -(void)cacheMsgs:(NSArray*)msgs callback:(AVArrayResultBlock)callback{
-    NSMutableArray* uncacheUserIds=[[NSMutableArray alloc] init];
+    NSMutableSet* userIds=[[NSMutableSet alloc] init];
     for(Msg* msg in msgs){
         NSString* otherId=[msg getOtherId];
         if(msg.roomType==CDMsgRoomTypeSingle){
-            if([self lookupUser:otherId]==nil){
-                [uncacheUserIds addObject:otherId];
-            }
+            [userIds addObject:otherId];
         }
     }
-    [UserService findUsers:uncacheUserIds callback:^(NSArray *objects, NSError *error) {
+    [self cacheUsersWithIds:[NSMutableArray arrayWithArray:[userIds allObjects]] callback:callback];
+}
+
+-(void)cacheUsersWithIds:(NSMutableArray*)userIds callback:(AVArrayResultBlock)callback{
+    NSMutableSet* uncachedUserIds=[[NSMutableSet alloc] init];
+    for(NSString* userId in userIds){
+        if([self lookupUser:userId]==nil){
+            [uncachedUserIds addObject:userId];
+        }
+    }
+    [UserService findUsers:[[NSMutableArray alloc] initWithArray:[uncachedUserIds allObjects]] callback:^(NSArray *objects, NSError *error) {
         if(objects){
             [self registerUsers:objects];
-            callback(objects,error);
-        }else{
-            callback(objects,error);
         }
+        callback(objects,error);
     }];
 }
 

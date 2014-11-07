@@ -14,6 +14,7 @@
 #import "Utils.h"
 #import <SDWebImage/UIImageView+WebCache.h>
 #import "CDGroupDetailController.h"
+#import "CDGroupAddMemberController.h"
 
 @interface CDChatRoomController () <QBImagePickerControllerDelegate, UIImagePickerControllerDelegate,UINavigationControllerDelegate> {
     NSMutableDictionary *_loadedData;
@@ -160,9 +161,18 @@
 }
 
 - (void)goChatGroupDetail:(id)sender {
-    CDGroupDetailController *controller=[[CDGroupDetailController alloc] init];
+//    CDGroupDetailController *controller=[[CDGroupDetailController alloc] init];
+//    controller.chatGroup=self.chatGroup;
+//    [self.navigationController pushViewController: controller animated:YES];
+
+    UICollectionViewFlowLayout *flow = [[UICollectionViewFlowLayout alloc] init];
+    [flow setItemSize:CGSizeMake(240, 240)];
+    [flow setScrollDirection:UICollectionViewScrollDirectionVertical];
+    
+    CDGroupDetailController* controller=[[CDGroupDetailController alloc] initWithNibName:@"CDGroupDetailController" bundle:nil];
     controller.chatGroup=self.chatGroup;
-    [self.navigationController pushViewController: controller animated:YES];
+    [self.navigationController pushViewController:controller animated:YES];
+
 }
 
 #pragma mark - Table view data source

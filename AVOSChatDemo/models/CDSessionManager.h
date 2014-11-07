@@ -41,6 +41,7 @@
 - (void)registerUsers:(NSArray*)users;
 - (void)registerUser:(User*)user;
 - (User *)lookupUser:(NSString*)userId;
+-(void)cacheUsersWithIds:(NSArray*)userIds callback:(AVArrayResultBlock)callback;
 
 -(void)openSession;
 -(void)closeSession;
