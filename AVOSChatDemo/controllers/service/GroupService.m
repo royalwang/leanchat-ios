@@ -18,6 +18,7 @@
     [q includeKey:@"owner"];
     [q setCachePolicy:kAVCachePolicyNetworkElseCache];
     [q whereKey:@"m" equalTo:user.objectId];
+    [q orderByDescending:@"updatedAt"];
     [q findObjectsInBackgroundWithBlock:callback];
 }
 

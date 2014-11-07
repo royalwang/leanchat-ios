@@ -11,6 +11,9 @@
 #import "UserService.h"
 #import "CDSessionManager.h"
 #import "Utils.h"
+#import "CDChatRoomController.h"
+#import "CDGroupAddMemberController.h"
+#import "CDCommonDefine.h"
 
 @interface CDGroupDetailController (){
     NSArray* groupMembers;
@@ -35,21 +38,46 @@ static NSString * const reuseIdentifier = @"Cell";
     NSLog(@"nibName=%@",nibName);
     [self.collectionView registerNib:[UINib nibWithNibName:nibName bundle:nil]  forCellWithReuseIdentifier:reuseIdentifier];
     self.collectionView.backgroundColor = [UIColor whiteColor];
+    self.navigationItem.rightBarButtonItem=[[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAdd target:self action:@selector(addMember)];
     
     sessionManager=[CDSessionManager sharedInstance];
-    [sessionManager cacheUsersWithIds:self.chatGroup.m callback:^(NSArray *objects, NSError *error) {
+    // Do any additional setup after loading the view.
+    [self initWithMembers:self.chatGroup.m];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(refreshChatGroup) name:NOTIFICATION_GROUP_UPDATED object:nil];
+}
+
+-(void)initWithMembers:(NSArray*)userIds{
+    [sessionManager cacheUsersWithIds:userIds callback:^(NSArray *objects, NSError *error) {
         [Utils filterError:error callback:^{
             groupMembers=self.chatGroup.m;
             [self.collectionView reloadData];
         }];
     }];
-
-    // Do any additional setup after loading the view.
 }
+
+-(void)refreshChatGroup{
+    [self.chatGroup fetchInBackgroundWithBlock:^(AVObject *object, NSError *error) {
+        [Utils filterError:error callback:^{
+            [self initWithMembers:self.chatGroup.m];
+        }];
+    }];
+}
+
+-(void)dealloc{
+    [[NSNotificationCenter defaultCenter] removeObserver:self  name:NOTIFICATION_GROUP_UPDATED object:nil];
+}
+
+
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
+}
+
+-(void)addMember{
+    CDGroupAddMemberController *controller=[[CDGroupAddMemberController alloc] init];
+    controller.chatGroup=self.chatGroup;
+    [self.navigationController pushViewController:controller animated:YES];
 }
 
 /*
@@ -82,12 +110,6 @@ static NSString * const reuseIdentifier = @"Cell";
     
     [UserService displayAvatar:user avatarView:imageView];
     label.text=user.username;
-    
-    
-    //[cell setBackgroundColor:[UIColor greenColor]];
-
-//    CDTestCollectionViewCell *cell=[collectionView dequeueReusableCellWithReuseIdentifier:reuseIdentifier forIndexPath:indexPath];
-//    [cell setBackgroundColor:[UIColor greenColor]];
     return cell;
 }
 
@@ -104,12 +126,24 @@ static NSString * const reuseIdentifier = @"Cell";
 }
 */
 
-/*
 // Uncomment this method to specify if the specified item should be selected
 - (BOOL)collectionView:(UICollectionView *)collectionView shouldSelectItemAtIndexPath:(NSIndexPath *)indexPath {
+    NSString* userId=[groupMembers objectAtIndex:indexPath.row];
+    NSString* curUserId=[User curUserId];
+    if([curUserId isEqualToString:userId]==YES){
+        return YES;
+    }
+    User* user=[sessionManager lookupUser:userId];
+    [self.navigationController popToRootViewControllerAnimated:YES];
+    UIViewController *rootViewController = self.navigationController.viewControllers[0];
+    [rootViewController.presentingViewController dismissViewControllerAnimated:NO completion:nil];
+    CDChatRoomController* chatController=[[CDChatRoomController alloc] init];
+    chatController.type=CDMsgRoomTypeSingle;
+    chatController.chatUser=user;
+    UINavigationController* nav=[[UINavigationController alloc] initWithRootViewController:chatController];
+    [[rootViewController presentingViewController] presentViewController:nav animated:YES completion:nil];
     return YES;
 }
-*/
 
 /*
 // Uncomment these methods to specify if an action menu should be displayed for the specified item, and react to actions performed on the item

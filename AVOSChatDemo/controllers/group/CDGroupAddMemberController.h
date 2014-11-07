@@ -7,7 +7,10 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "ChatGroup.h"
 
 @interface CDGroupAddMemberController : UITableViewController
+
+@property ChatGroup* chatGroup;
 
 @end

@@ -12,6 +12,7 @@
 #import "ChatRoom.h"
 #import "Utils.h"
 #import "CloudService.h"
+#import "ChatGroup.h"
 
 @interface CDSessionManager () {
     FMDatabase *_database;
@@ -161,8 +162,12 @@ static NSString *messagesTableSQL=@"create table if not exists messages (id inte
     [_session unwatchPeerIds:@[peerId]];
 }
 
+-(AVGroup*)getGroupById:(NSString*)groupId{
+    return [AVGroup getGroupWithGroupId:groupId session:_session];
+}
+
 - (AVGroup *)joinGroup:(NSString *)groupId {
-    AVGroup *group = [AVGroup getGroupWithGroupId:groupId session:_session];
+    AVGroup *group = [self getGroupById:groupId];
     group.delegate = self;
     [group join];
     return group;
@@ -312,6 +317,10 @@ static NSString *messagesTableSQL=@"create table if not exists messages (id inte
 - (void )insertMessageToDBAndNotify:(Msg*)msg{
     [self insertMsgToDB:msg];
     [self notifyMessageUpdate];
+}
+
+-(void)notifyGroupUpdate{
+    [[NSNotificationCenter defaultCenter] postNotificationName:NOTIFICATION_GROUP_UPDATED object:nil];
 }
 
 -(void)notifyMessageUpdate{
@@ -495,6 +504,7 @@ static NSString *messagesTableSQL=@"create table if not exists messages (id inte
 - (void)group:(AVGroup *)group didReceiveEvent:(AVGroupEvent)event peerIds:(NSArray *)peerIds {
     NSLog(@"%s", __PRETTY_FUNCTION__);
     NSLog(@"group:%@ event:%u peerIds:%@", group.groupId, event, peerIds);
+    [self notifyGroupUpdate];
 }
 
 - (void)group:(AVGroup *)group messageSendFinished:(AVMessage *)message {
@@ -532,6 +542,11 @@ static NSString *messagesTableSQL=@"create table if not exists messages (id inte
 
 -(NSString*)getPeerId:(User*)user{
     return user.objectId;
+}
+
+-(void)inviteMembersToGroup:(ChatGroup*) chatGroup userIds:(NSArray*)userIds{
+    AVGroup* group=[self getGroupById:chatGroup.objectId];
+    [group invitePeerIds:userIds];
 }
 
 @end

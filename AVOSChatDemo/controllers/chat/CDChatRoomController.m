@@ -172,7 +172,6 @@
     CDGroupDetailController* controller=[[CDGroupDetailController alloc] initWithNibName:@"CDGroupDetailController" bundle:nil];
     controller.chatGroup=self.chatGroup;
     [self.navigationController pushViewController:controller animated:YES];
-
 }
 
 #pragma mark - Table view data source
