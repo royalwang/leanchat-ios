@@ -73,4 +73,8 @@
     }
 }
 
++(NSMutableArray*)setToArray:(NSMutableSet*)set{
+    return [[NSMutableArray alloc] initWithArray:[set allObjects]];
+}
+
 @end

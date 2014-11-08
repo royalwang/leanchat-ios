@@ -24,4 +24,5 @@ typedef void (^CDBlock)();
 + (UIImage *)imageWithImage:(UIImage *)image scaledToSize:(CGSize)newSize;
 +(void)filterError:(NSError*)error callback:(CDBlock)callback;
 
++(NSMutableArray*)setToArray:(NSMutableSet*)set;
 @end

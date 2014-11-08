@@ -13,12 +13,14 @@
 #import "Utils.h"
 #import "CloudService.h"
 #import "ChatGroup.h"
+#import "GroupService.h"
 
 @interface CDSessionManager () {
     FMDatabase *_database;
     AVSession *_session;
     NSMutableArray *_chatRooms;
     NSMutableDictionary *_cachedUsers;
+    NSMutableDictionary *cachedChatGroups;
 }
 
 @end
@@ -59,6 +61,7 @@ static NSString *messagesTableSQL=@"create table if not exists messages (id inte
     if ((self = [super init])) {
         _chatRooms = [[NSMutableArray alloc] init];
         _cachedUsers=[[NSMutableDictionary alloc] init];
+        cachedChatGroups=[[NSMutableDictionary alloc] init];
         
         AVSession *session = [[AVSession alloc] init];
         session.sessionDelegate = self;
@@ -125,20 +128,41 @@ static NSString *messagesTableSQL=@"create table if not exists messages (id inte
             callback(objects,error);
         }else{
             [_chatRooms removeAllObjects];
+            NSMutableSet *userIds=[[NSMutableSet alloc] init];
+            NSMutableSet *groupIds=[[NSMutableSet alloc] init];
             for(Msg* msg in msgs){
                 NSString* otherId=[msg getOtherId];
-                ChatRoom* chatRoom=[[ChatRoom alloc] init];
-                chatRoom.roomType=msg.roomType;
                 if(msg.roomType==CDMsgRoomTypeSingle){
-                    User* other=[self lookupUser:otherId];
-                    chatRoom.chatUser=other;
+                    if([self lookupUser:otherId]==NO){
+                        [userIds addObject:otherId];
+                    }
                 }else{
-                    AVGroup *group = [AVGroup getGroupWithGroupId:otherId session:_session];
-                    chatRoom.group=group;
+                    if([self lookupChatGroupById:otherId]==NO){
+                        [groupIds addObject:otherId];
+                    }
                 }
-                [_chatRooms addObject:chatRoom];
             }
-            callback(_chatRooms,error);
+            [self cacheUsersWithIds:[Utils setToArray:userIds] callback:^(NSArray *objects, NSError *error) {
+                [Utils filterError:error callback:^{
+                    [self cacheChatGroupsWithIds:groupIds withCallback:^(NSArray *objects, NSError *error) {
+                        [Utils filterError:error callback:^{
+                            for(Msg* msg in msgs){
+                                ChatRoom* chatRoom=[[ChatRoom alloc] init];
+                                chatRoom.roomType=msg.roomType;
+                                NSString* otherId=[msg getOtherId];
+                                if(msg.roomType==CDMsgRoomTypeSingle){
+                                    chatRoom.chatUser=[self lookupUser:otherId];;
+                                }else{
+                                    chatRoom.chatGroup=[self lookupChatGroupById:otherId];
+                                }
+                                [_chatRooms addObject:chatRoom];
+                            }
+                            callback(_chatRooms,error);
+                        }];
+                    }];
+                }];
+            }];
+            
         }
     }];
 }
@@ -555,6 +579,32 @@ static NSString *messagesTableSQL=@"create table if not exists messages (id inte
     NSMutableArray* arr=[[NSMutableArray alloc] init];
     [arr addObject:userId];
     [group kickPeerIds:arr];
+}
+
+-(void)quitFromGroup:(ChatGroup*)chatGroup{
+    AVGroup* group=[self getGroupById:chatGroup.objectId];
+    [group quit];
+}
+
+#pragma group cache
+
+-(ChatGroup*)lookupChatGroupById:(NSString*)groupId{
+    return [cachedChatGroups valueForKey:groupId];
+}
+
+-(void)registerChatGroup:(ChatGroup*)chatGroup{
+    [cachedChatGroups setObject:chatGroup forKey:chatGroup.objectId];
+}
+
+-(void)cacheChatGroupsWithIds:(NSMutableSet*)groupIds withCallback:(AVArrayResultBlock)callback{
+    [GroupService findGroups:^(NSArray *objects, NSError *error) {
+        [Utils filterError:error callback:^{
+            for(ChatGroup* chatGroup in objects){
+                [self registerChatGroup:chatGroup];
+            }
+            callback(objects,error);
+        }];
+    }];
 }
 
 @end

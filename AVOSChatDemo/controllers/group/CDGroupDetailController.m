@@ -43,6 +43,8 @@ static NSString * const reuseIdentifier = @"Cell";
     if([self.chatGroup.owner.objectId isEqualToString:curUserId]){
         self.navigationItem.rightBarButtonItem=[[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAdd target:self action:@selector(addMember)];
         own=YES;
+    }else{
+        self.navigationItem.rightBarButtonItem=[[UIBarButtonItem alloc] initWithTitle:@"退群" style:UIBarButtonItemStylePlain target:self action:@selector(quitGroup)];
     }
     
     sessionManager=[CDSessionManager sharedInstance];
@@ -53,6 +55,13 @@ static NSString * const reuseIdentifier = @"Cell";
     [self.collectionView addGestureRecognizer:gestureRecognizer];
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(refreshChatGroup) name:NOTIFICATION_GROUP_UPDATED object:nil];
+}
+
+-(void)quitGroup{
+    [sessionManager quitFromGroup:self.chatGroup];
+    [self.navigationController popToRootViewControllerAnimated:YES];
+    UIViewController* first=self.navigationController.viewControllers[0];
+    [first.presentingViewController dismissViewControllerAnimated:YES completion:nil];;
 }
 
 -(void)longPressUser:(UILongPressGestureRecognizer*)gestureRecognizer{
@@ -171,15 +180,13 @@ clickedButtonAtIndex:(NSInteger)buttonIndex{
     if([curUserId isEqualToString:userId]==YES){
         return YES;
     }
+    
     User* user=[sessionManager lookupUser:userId];
-    [self.navigationController popToRootViewControllerAnimated:YES];
-    UIViewController *rootViewController = self.navigationController.viewControllers[0];
-    [rootViewController.presentingViewController dismissViewControllerAnimated:NO completion:nil];
     CDChatRoomController* chatController=[[CDChatRoomController alloc] init];
     chatController.type=CDMsgRoomTypeSingle;
     chatController.chatUser=user;
-    UINavigationController* nav=[[UINavigationController alloc] initWithRootViewController:chatController];
-    [[rootViewController presentingViewController] presentViewController:nav animated:YES completion:nil];
+    
+    [self.navigationController setViewControllers:[NSArray arrayWithObject:chatController] animated:YES];
     return YES;
 }
 

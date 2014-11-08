@@ -12,6 +12,8 @@
 #import "CDPopMenu.h"
 #import "CDChatConfirmController.h"
 #import "ChatRoom.h"
+#import "CDImageLabelTableCell.h"
+#import "Utils.h"
 
 enum : NSUInteger {
     kTagNameLabel = 10000,
@@ -25,6 +27,8 @@ enum : NSUInteger {
 
 @implementation CDChatListController
 
+static NSString *cellIdentifier = @"ContactCell";
+
 - (instancetype)init {
     if ((self = [super init])) {
         self.title = @"消息";
@@ -36,15 +40,16 @@ enum : NSUInteger {
 - (void)viewDidLoad {
     [super viewDidLoad];
     self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAdd target:self action:@selector(showMenuOnView:)];
+    NSString* nibName=NSStringFromClass([CDImageLabelTableCell class]);
+    [self.tableView registerNib:[UINib nibWithNibName:nibName bundle:nil] forCellReuseIdentifier:cellIdentifier];
 }
 
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
     [[CDSessionManager sharedInstance] findConversations:^(NSArray *objects, NSError *error) {
-        if(error){
-        }else{
-           [self.tableView reloadData];
-        }
+        [Utils filterError:error callback:^{
+            [self.tableView reloadData];
+        }];
     }];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(sessionUpdated:) name:NOTIFICATION_SESSION_UPDATED object:nil];
 }
@@ -81,30 +86,23 @@ enum : NSUInteger {
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-    static NSString *cellIdentifier = @"ContactCell";
-    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:cellIdentifier];
-    if (!cell) {
-        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellIdentifier];
-        UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(10, 5, 300, 30)];
-        label.font = [UIFont systemFontOfSize:14];
-        label.tag = kTagNameLabel;
-        label.textColor = [UIColor redColor];
-        [cell.contentView addSubview:label];
+    CDImageLabelTableCell *cell = [tableView dequeueReusableCellWithIdentifier:cellIdentifier];
+    if (!cell){
+        cell =[[CDImageLabelTableCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellIdentifier];
     }
-    return cell;
-}
-
-- (void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath {
     ChatRoom *chatRoom = [[[CDSessionManager sharedInstance] chatRooms] objectAtIndex:indexPath.row];
     CDMsgRoomType type=[chatRoom roomType];
     NSMutableString *nameString = [[NSMutableString alloc] init];
     if (type == CDMsgRoomTypeGroup) {
-        [nameString appendFormat:@"group:%@", chatRoom.group.groupId];
+        NSString* groupName=chatRoom.chatGroup.name;
+        [nameString appendFormat:@"%@", groupName];
+        [cell.myImageView setImage:[UIImage imageNamed:@"group_icon"]];
     } else {
+        [UserService displayAvatar:chatRoom.chatUser avatarView:cell.myImageView];
         [nameString appendFormat:@"%@", chatRoom.chatUser.username];
     }
-    UILabel *label = (UILabel *)[cell.contentView viewWithTag:kTagNameLabel];
-    label.text = nameString;
+    cell.myLabel.text=nameString;
+    return cell;
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
@@ -113,7 +111,7 @@ enum : NSUInteger {
     CDChatRoomController *controller = [[CDChatRoomController alloc] init];
     controller.type = type;
     if (type == CDMsgRoomTypeGroup) {
-        controller.group=chatRoom.group;
+        controller.chatGroup=chatRoom.chatGroup;
     } else {
         controller.chatUser=chatRoom.chatUser;
     }

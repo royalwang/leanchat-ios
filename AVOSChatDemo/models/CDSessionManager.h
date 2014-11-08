@@ -47,11 +47,13 @@
 - (void)startNewGroup:(NSString*)name callback:(AVGroupResultBlock)callback ;
 -(void)inviteMembersToGroup:(ChatGroup*) chatGroup userIds:(NSArray*)userIds;
 -(void)kickMemberFromGroup:(ChatGroup*)chatGroup userId:(NSString*)userId;
+-(void)quitFromGroup:(ChatGroup*)chatGroup;
 
 #pragma user cache
 - (void)registerUsers:(NSArray*)users;
 - (void)registerUser:(User*)user;
 - (User *)lookupUser:(NSString*)userId;
 -(void)cacheUsersWithIds:(NSArray*)userIds callback:(AVArrayResultBlock)callback;
+
 
 @end

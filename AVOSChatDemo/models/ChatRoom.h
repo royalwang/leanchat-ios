@@ -9,9 +9,10 @@
 #import <Foundation/Foundation.h>
 #import "Msg.h"
 #import "User.h"
+#import "ChatGroup.h"
 
 @interface ChatRoom : NSObject
 @property CDMsgRoomType roomType;
-@property AVGroup* group;
+@property ChatGroup* chatGroup;
 @property User* chatUser;
 @end

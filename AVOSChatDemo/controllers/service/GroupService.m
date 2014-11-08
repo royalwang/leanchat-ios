@@ -22,4 +22,15 @@
     [q findObjectsInBackgroundWithBlock:callback];
 }
 
++(void)findGroupsByIds:(NSMutableSet*)groupIds withCallback:(AVArrayResultBlock)callback{
+    if(groupIds.count>0){
+        AVQuery* q=[ChatGroup query];
+        [q whereKey:@"objectId" containedIn:[groupIds allObjects]];
+        [q includeKey:@"owner"];
+        [q findObjectsInBackgroundWithBlock:callback];
+    }else{
+        callback([[NSMutableArray alloc] init],nil);
+    }
+}
+
 @end

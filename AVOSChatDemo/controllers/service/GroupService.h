@@ -13,4 +13,6 @@
 
 +(void)findGroups:(AVArrayResultBlock)callback;
 
++(void)findGroupsByIds:(NSMutableSet*)groupIds withCallback:(AVArrayResultBlock)callback;
+
 @end
