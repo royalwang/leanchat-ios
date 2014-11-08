@@ -42,13 +42,13 @@ static NSString * const reuseIdentifier = @"Cell";
     NSString* curUserId=[User curUserId];
     if([self.chatGroup.owner.objectId isEqualToString:curUserId]){
         self.navigationItem.rightBarButtonItem=[[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAdd target:self action:@selector(addMember)];
+        own=YES;
     }
     
     sessionManager=[CDSessionManager sharedInstance];
     // Do any additional setup after loading the view.
     [self initWithMembers:self.chatGroup.m];
-    UILongPressGestureRecognizer* gestureRecognizer;
-    gestureRecognizer=[[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(longPressUser:)];
+    UILongPressGestureRecognizer* gestureRecognizer=[[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(longPressUser:)];
     gestureRecognizer.delegate=self;
     [self.collectionView addGestureRecognizer:gestureRecognizer];
     
@@ -56,7 +56,7 @@ static NSString * const reuseIdentifier = @"Cell";
 }
 
 -(void)longPressUser:(UILongPressGestureRecognizer*)gestureRecognizer{
-    if(gestureRecognizer.state!=UIGestureRecognizerStateEnded){
+    if(gestureRecognizer.state!=UIGestureRecognizerStateBegan){
         return;
     }
     CGPoint p=[gestureRecognizer locationInView:self.collectionView];
@@ -65,9 +65,12 @@ static NSString * const reuseIdentifier = @"Cell";
         NSLog(@"can't not find index path");
     }else{
         if(own){
-            UIAlertView * alert=[[UIAlertView alloc] initWithTitle:nil message:@"确定要踢走该成员吗？"  delegate:self cancelButtonTitle:@"确定" otherButtonTitles:@"取消", nil];
-            alert.tag=indexPath.row;
-            [alert show];
+            NSString* userId=[self.chatGroup.m objectAtIndex:indexPath.row];
+            if([userId isEqualToString:self.chatGroup.owner.objectId]==NO){
+                UIAlertView * alert=[[UIAlertView alloc] initWithTitle:nil message:@"确定要踢走该成员吗？"  delegate:self cancelButtonTitle:@"确定" otherButtonTitles:@"取消", nil];
+                alert.tag=indexPath.row;
+                [alert show];
+            }
         }
     }
 }
