@@ -18,6 +18,7 @@
 @interface CDGroupDetailController (){
     NSArray* groupMembers;
     CDSessionManager* sessionManager;
+    BOOL own;
 }
 @end
 
@@ -38,12 +39,46 @@ static NSString * const reuseIdentifier = @"Cell";
     NSLog(@"nibName=%@",nibName);
     [self.collectionView registerNib:[UINib nibWithNibName:nibName bundle:nil]  forCellWithReuseIdentifier:reuseIdentifier];
     self.collectionView.backgroundColor = [UIColor whiteColor];
-    self.navigationItem.rightBarButtonItem=[[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAdd target:self action:@selector(addMember)];
+    NSString* curUserId=[User curUserId];
+    if([self.chatGroup.owner.objectId isEqualToString:curUserId]){
+        self.navigationItem.rightBarButtonItem=[[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAdd target:self action:@selector(addMember)];
+    }
     
     sessionManager=[CDSessionManager sharedInstance];
     // Do any additional setup after loading the view.
     [self initWithMembers:self.chatGroup.m];
+    UILongPressGestureRecognizer* gestureRecognizer;
+    gestureRecognizer=[[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(longPressUser:)];
+    gestureRecognizer.delegate=self;
+    [self.collectionView addGestureRecognizer:gestureRecognizer];
+    
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(refreshChatGroup) name:NOTIFICATION_GROUP_UPDATED object:nil];
+}
+
+-(void)longPressUser:(UILongPressGestureRecognizer*)gestureRecognizer{
+    if(gestureRecognizer.state!=UIGestureRecognizerStateEnded){
+        return;
+    }
+    CGPoint p=[gestureRecognizer locationInView:self.collectionView];
+    NSIndexPath* indexPath=[self.collectionView indexPathForItemAtPoint:p];
+    if(indexPath==nil){
+        NSLog(@"can't not find index path");
+    }else{
+        if(own){
+            UIAlertView * alert=[[UIAlertView alloc] initWithTitle:nil message:@"确定要踢走该成员吗？"  delegate:self cancelButtonTitle:@"确定" otherButtonTitles:@"取消", nil];
+            alert.tag=indexPath.row;
+            [alert show];
+        }
+    }
+}
+
+- (void)alertView:(UIAlertView *)alertView
+clickedButtonAtIndex:(NSInteger)buttonIndex{
+    if(buttonIndex==0){
+        int pos=alertView.tag;
+        NSString* userId=[self.chatGroup.m objectAtIndex:pos];
+        [sessionManager kickMemberFromGroup:self.chatGroup userId:userId];
+    }
 }
 
 -(void)initWithMembers:(NSArray*)userIds{

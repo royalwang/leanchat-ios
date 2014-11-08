@@ -16,17 +16,18 @@
 
 @property NSMutableArray* friends;
 
-//conversation
+#pragma conversation
 - (NSArray *)chatRooms;
 -(void)findConversations:(AVArrayResultBlock)callback;
 
-//session
+
+#pragma session
 - (void)watchPeerId:(NSString *)peerId;
 -(void)unwatchPeerId:(NSString*)peerId;
 -(void)openSession;
 -(void)closeSession;
 
-//message
+#pragma operation message
 - (void)sendMessage:(NSString *)content type:(CDMsgType)type toPeerId:(NSString *)toPeerId group:(AVGroup*)group;
 - (void)sendAttachment:(NSString*)objectId type:(CDMsgType)type toPeerId:(NSString *)toPeerId group:(AVGroup*)group;
 
@@ -37,16 +38,17 @@
 +(NSString*)getPathByObjectId:(NSString*)objectId;
 +(NSString*)uuid;
 
-//histroy
+#pragma histroy
 - (void)getHistoryMessagesForPeerId:(NSString *)peerId callback:(AVArrayResultBlock)callback;
 - (void)getHistoryMessagesForGroup:(NSString *)groupId callback:(AVArrayResultBlock)callback;
 
-//group
+#pragma group
 - (AVGroup *)joinGroup:(NSString *)groupId;
 - (void)startNewGroup:(NSString*)name callback:(AVGroupResultBlock)callback ;
 -(void)inviteMembersToGroup:(ChatGroup*) chatGroup userIds:(NSArray*)userIds;
+-(void)kickMemberFromGroup:(ChatGroup*)chatGroup userId:(NSString*)userId;
 
-//user cache
+#pragma user cache
 - (void)registerUsers:(NSArray*)users;
 - (void)registerUser:(User*)user;
 - (User *)lookupUser:(NSString*)userId;

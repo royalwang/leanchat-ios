@@ -544,9 +544,17 @@ static NSString *messagesTableSQL=@"create table if not exists messages (id inte
     return user.objectId;
 }
 
+#pragma group
 -(void)inviteMembersToGroup:(ChatGroup*) chatGroup userIds:(NSArray*)userIds{
     AVGroup* group=[self getGroupById:chatGroup.objectId];
     [group invitePeerIds:userIds];
+}
+
+-(void)kickMemberFromGroup:(ChatGroup*)chatGroup userId:(NSString*)userId{
+    AVGroup* group=[self getGroupById:chatGroup.objectId];
+    NSMutableArray* arr=[[NSMutableArray alloc] init];
+    [arr addObject:userId];
+    [group kickPeerIds:arr];
 }
 
 @end
