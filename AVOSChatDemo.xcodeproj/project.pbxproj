@@ -39,6 +39,7 @@
 		708A2C971A0B4CFA00630A01 /* CDNewGroupViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 708A2C951A0B4CFA00630A01 /* CDNewGroupViewController.m */; };
 		708A2C981A0B4CFA00630A01 /* CDNewGroupViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 708A2C961A0B4CFA00630A01 /* CDNewGroupViewController.xib */; };
 		708A2C9B1A0B4E9100630A01 /* CDButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 708A2C9A1A0B4E9100630A01 /* CDButton.m */; };
+		70D14CA71A0F3498008795ED /* CDChatListController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 70D14CA61A0F3498008795ED /* CDChatListController.xib */; };
 		70FE13561A0B98E800CE106A /* chat_menu_people.png in Resources */ = {isa = PBXBuildFile; fileRef = 70FE13551A0B98E800CE106A /* chat_menu_people.png */; };
 		70FE135A1A0B9C3000CE106A /* CDGroupDetailController.m in Sources */ = {isa = PBXBuildFile; fileRef = 70FE13581A0B9C3000CE106A /* CDGroupDetailController.m */; };
 		70FE135B1A0B9C3000CE106A /* CDGroupDetailController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 70FE13591A0B9C3000CE106A /* CDGroupDetailController.xib */; };
@@ -180,6 +181,7 @@
 		708A2C961A0B4CFA00630A01 /* CDNewGroupViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = CDNewGroupViewController.xib; sourceTree = "<group>"; };
 		708A2C991A0B4E9100630A01 /* CDButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CDButton.h; sourceTree = "<group>"; };
 		708A2C9A1A0B4E9100630A01 /* CDButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CDButton.m; sourceTree = "<group>"; };
+		70D14CA61A0F3498008795ED /* CDChatListController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = CDChatListController.xib; sourceTree = "<group>"; };
 		70FE13551A0B98E800CE106A /* chat_menu_people.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = chat_menu_people.png; sourceTree = "<group>"; };
 		70FE13571A0B9C3000CE106A /* CDGroupDetailController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CDGroupDetailController.h; sourceTree = "<group>"; };
 		70FE13581A0B9C3000CE106A /* CDGroupDetailController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CDGroupDetailController.m; sourceTree = "<group>"; };
@@ -410,6 +412,7 @@
 			children = (
 				8C05A0501981FEE4008B4CC6 /* CDChatListController.h */,
 				8C05A0511981FEE4008B4CC6 /* CDChatListController.m */,
+				70D14CA61A0F3498008795ED /* CDChatListController.xib */,
 				8CACCFE01986676100E9DE40 /* CDChatRoomController.h */,
 				8CACCFE11986676100E9DE40 /* CDChatRoomController.m */,
 				8C470CB6199264B0006A4E87 /* CDChatDetailController.h */,
@@ -838,6 +841,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				70D14CA71A0F3498008795ED /* CDChatListController.xib in Resources */,
 				70FE135B1A0B9C3000CE106A /* CDGroupDetailController.xib in Resources */,
 				8CB3085F1981007F00BDC34D /* bottom_bar_normal@2x.png in Resources */,
 				8CB3086419810B3600BDC34D /* background@2x.png in Resources */,

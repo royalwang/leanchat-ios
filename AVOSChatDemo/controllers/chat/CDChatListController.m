@@ -22,6 +22,7 @@ enum : NSUInteger {
 @interface CDChatListController ()  {
     CDPopMenu *_popMenu;
 }
+@property (weak, nonatomic) IBOutlet UITableView *tableView;
 
 @end
 
@@ -41,6 +42,8 @@ static NSString *cellIdentifier = @"ContactCell";
     [super viewDidLoad];
     self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAdd target:self action:@selector(showMenuOnView:)];
     NSString* nibName=NSStringFromClass([CDImageLabelTableCell class]);
+    self.tableView.dataSource=self;
+    self.tableView.delegate=self;
     [self.tableView registerNib:[UINib nibWithNibName:nibName bundle:nil] forCellReuseIdentifier:cellIdentifier];
 }
 
@@ -53,6 +56,7 @@ static NSString *cellIdentifier = @"ContactCell";
     }];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(sessionUpdated:) name:NOTIFICATION_SESSION_UPDATED object:nil];
 }
+
 
 - (void)viewDidDisappear:(BOOL)animated {
     [super viewDidDisappear:animated];
@@ -79,6 +83,13 @@ static NSString *cellIdentifier = @"ContactCell";
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
     return 40;
+}
+
+#pragma table view
+
+- (CGFloat) tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
+{
+    return 0.0f;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {

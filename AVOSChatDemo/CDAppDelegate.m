@@ -147,7 +147,7 @@
     nav = [[CDBaseNavigationController alloc] initWithRootViewController:controller];
     [tab addChildViewController:nav];
     
-    tab.selectedIndex=1;
+    tab.selectedIndex=0;
     
     self.window.rootViewController = tab;
     [[CDSessionManager sharedInstance] registerUser:[User currentUser]];
