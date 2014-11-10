@@ -13,10 +13,10 @@ typedef void (^CDBlock)();
 @interface Utils : NSObject
 
 +(void)alert:(NSString*)msg;
-+(NSString*)md5:(NSString*)s;
++(NSString*)md5OfString:(NSString*)s;
 +(void)alertError:(NSError*)error;
 
-+(UIActivityIndicatorView*)showIndicator:(UIView*)hookView;
++(UIActivityIndicatorView*)showIndicatorAtView:(UIView*)hookView;
 
 +(void)showNetworkIndicator;
 +(void)hideNetworkIndicator;

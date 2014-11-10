@@ -44,7 +44,7 @@ static NSString* cellIndentifier=@"cell";
 }
 
 -(void)refresh{
-    [GroupService findGroups:^(NSArray *objects, NSError *error) {
+    [GroupService findGroupsWithCallback:^(NSArray *objects, NSError *error) {
         chatGroups=objects;
         [self.tableView reloadData];
     }];

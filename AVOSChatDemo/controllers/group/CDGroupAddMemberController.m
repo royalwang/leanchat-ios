@@ -92,7 +92,7 @@ static NSString* reuseIdentifier=@"Cell";
     }
     NSString* userId=[potentialIds objectAtIndex:indexPath.row];
     User* user=(User*)[sessionManager lookupUser:userId];
-    [UserService displayAvatar:user avatarView:cell.myImageView];
+    [UserService displayAvatarOfUser:user avatarView:cell.myImageView];
     cell.myLabel.text=user.username;
     if([selected[indexPath.row] boolValue]){
         cell.accessoryType=UITableViewCellAccessoryCheckmark;

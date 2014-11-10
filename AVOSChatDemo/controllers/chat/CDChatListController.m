@@ -67,7 +67,7 @@ static NSString *cellIdentifier = @"ContactCell";
 
 -(void)refresh{
     [Utils showNetworkIndicator];
-    [sessionManager findConversations:^(NSArray *objects, NSError *error) {
+    [sessionManager findConversationsWithCallback:^(NSArray *objects, NSError *error) {
         [Utils hideNetworkIndicator];
         [Utils filterError:error callback:^{
             [self.tableView reloadData];
@@ -107,7 +107,7 @@ static NSString *cellIdentifier = @"ContactCell";
         [nameString appendFormat:@"%@", groupName];
         [cell.myImageView setImage:[UIImage imageNamed:@"group_icon"]];
     } else {
-        [UserService displayAvatar:chatRoom.chatUser avatarView:cell.myImageView];
+        [UserService displayAvatarOfUser:chatRoom.chatUser avatarView:cell.myImageView];
         [nameString appendFormat:@"%@", chatRoom.chatUser.username];
     }
     cell.myLabel.text=nameString;

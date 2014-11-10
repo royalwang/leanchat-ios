@@ -79,7 +79,7 @@
         UINavigationController* nav=[[UINavigationController alloc] initWithRootViewController:controller];
         [self presentViewController:nav animated:YES completion:nil];
     }else{
-        [CloudService tryCreateAddRequest:_user callback:^(id object, NSError *error) {
+        [CloudService tryCreateAddRequestWithToUser:_user callback:^(id object, NSError *error) {
             NSString *info;
             if(error==nil){
                 info=@"请求成功";

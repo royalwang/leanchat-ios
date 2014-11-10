@@ -32,9 +32,9 @@
 -(void)createNewGroup{
     NSString* name=[self.nameTextField text];
     if([name length]>0){
-        UIActivityIndicatorView* indicator=[Utils showIndicator:self.view];
+        UIActivityIndicatorView* indicator=[Utils showIndicatorAtView:self.view];
         CDSessionManager* man=[CDSessionManager sharedInstance];
-        [man startNewGroup:name callback:^(AVGroup *group, NSError *error) {
+        [man saveNewGroupWithName:name withCallback:^(AVGroup *group, NSError *error) {
             [indicator stopAnimating];
             if(error){
                 [Utils alertError:error];

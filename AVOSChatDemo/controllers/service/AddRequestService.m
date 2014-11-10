@@ -10,7 +10,7 @@
 
 @implementation AddRequestService
 
-+(void)findAddRequests:(AVArrayResultBlock)callback{
++(void)findAddRequestsWtihCallback:(AVArrayResultBlock)callback{
     User* curUser=[User currentUser];
     AVQuery *q=[AddRequest query];
     [q includeKey:@"fromUser"];

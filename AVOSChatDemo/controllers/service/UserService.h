@@ -11,9 +11,9 @@
 #import "User.h"
 
 @interface UserService : NSObject
-+(void)findFriends:(AVArrayResultBlock)callback;
-+(void)findUsers:(NSString*)partName withBlock:(AVArrayResultBlock)block;
-+(NSString*)getPeerId:(User*)user;
-+(void)findUsers:(NSArray*)userIds callback:(AVArrayResultBlock)callback;
-+(void)displayAvatar:(User*)user avatarView:(UIImageView*)avatarView;
++(void)findFriendsWithCallback:(AVArrayResultBlock)callback;
++(void)findUsersByPartname:(NSString*)partName withBlock:(AVArrayResultBlock)block;
++(NSString*)getPeerIdOfUser:(User*)user;
++(void)findUsersByIds:(NSArray*)userIds callback:(AVArrayResultBlock)callback;
++(void)displayAvatarOfUser:(User*)user avatarView:(UIImageView*)avatarView;
 @end

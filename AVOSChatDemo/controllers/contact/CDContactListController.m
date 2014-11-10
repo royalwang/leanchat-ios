@@ -82,7 +82,7 @@ enum : NSUInteger {
 
 - (void)startFetchUserList {
     [Utils showNetworkIndicator];
-    [UserService findFriends:^(NSArray *objects, NSError *error) {
+    [UserService findFriendsWithCallback:^(NSArray *objects, NSError *error) {
         [Utils hideNetworkIndicator];
         if (objects) {
             self.users = [objects mutableCopy];
@@ -121,7 +121,7 @@ enum : NSUInteger {
 - (void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath {
     CDImageLabelTableCell* tableCell=(CDImageLabelTableCell*)cell;
     User *user = [self.users objectAtIndex:indexPath.row];
-    [UserService displayAvatar:user avatarView:tableCell.myImageView];
+    [UserService displayAvatarOfUser:user avatarView:tableCell.myImageView];
     tableCell.myLabel.text = user.username;
 }
 

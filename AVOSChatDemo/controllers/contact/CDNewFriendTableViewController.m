@@ -40,8 +40,8 @@
 }
 
 -(void)refresh{
-    UIActivityIndicatorView* indicator=[Utils showIndicator:self.view];
-    [AddRequestService findAddRequests:^(NSArray *objects, NSError *error) {
+    UIActivityIndicatorView* indicator=[Utils showIndicatorAtView:self.view];
+    [AddRequestService findAddRequestsWtihCallback:^(NSArray *objects, NSError *error) {
         [indicator stopAnimating];
         if(error){
             [Utils alert:[error description]];
@@ -99,7 +99,7 @@
 -(void)actionBtnClicked:(id)sender{
     UIButton *btn=(UIButton*)sender;
     AddRequest* addRequest=[addRequests objectAtIndex:btn.tag];
-    [CloudService agreeAddRequest:addRequest.objectId callback:^(id object, NSError *error) {
+    [CloudService agreeAddRequestWithId:addRequest.objectId callback:^(id object, NSError *error) {
         if(error){
             [Utils alert:[error localizedDescription]];
         }else{

@@ -11,7 +11,7 @@
 
 @interface GroupService : NSObject
 
-+(void)findGroups:(AVArrayResultBlock)callback;
++(void)findGroupsWithCallback:(AVArrayResultBlock)callback;
 
 +(void)findGroupsByIds:(NSMutableSet*)groupIds withCallback:(AVArrayResultBlock)callback;
 

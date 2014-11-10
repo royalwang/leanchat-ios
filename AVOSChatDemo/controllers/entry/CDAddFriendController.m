@@ -36,7 +36,7 @@ static NSString* cellIndentifier=@"cellIndentifier";
 }
 
 -(void)searchUser:(NSString *)name{
-    [UserService findUsers:name withBlock:^(NSArray *objects, NSError *error) {
+    [UserService findUsersByPartname:name withBlock:^(NSArray *objects, NSError *error) {
         if(objects){
             users=objects;
             [_tableView reloadData];
@@ -59,7 +59,7 @@ static NSString* cellIndentifier=@"cellIndentifier";
     }
     User *user=(User*)users[indexPath.row];
     cell.myLabel.text=user.username;
-    [UserService displayAvatar:user avatarView:cell.myImageView];
+    [UserService displayAvatarOfUser:user avatarView:cell.myImageView];
     return cell;
 }
 

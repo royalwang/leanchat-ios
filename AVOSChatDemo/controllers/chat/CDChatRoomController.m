@@ -81,7 +81,7 @@
     if(self.type==CDMsgRoomTypeSingle){
         [sessionManager watchPeerId:self.chatUser.objectId];
     }else{
-        _group=[sessionManager joinGroup:_chatGroup.objectId];
+        _group=[sessionManager joinGroupById:_chatGroup.objectId];
     }
 }
 
@@ -179,7 +179,7 @@
 #pragma mark - Messages view delegate
 
 - (void)messageUpdated:(NSNotification *)notification {
-    NSString* convid=[CDSessionManager getConvid:self.type otherId:self.chatUser.objectId groupId:self.group.groupId];
+    NSString* convid=[CDSessionManager getConvidOfRoomType:self.type otherId:self.chatUser.objectId groupId:self.group.groupId];
     NSMutableArray *messages  = [[sessionManager getMsgsForConvid:convid] mutableCopy];
     _messages=messages;
     //UIApplication* app=[UIApplication sharedApplication];
@@ -209,7 +209,7 @@
 }
 
 - (void)sendAttachment:(NSString *)objectId{
-    [sessionManager sendAttachment:objectId type:CDMsgTypeImage toPeerId:self.chatUser.objectId group:self.group];
+    [sessionManager sendAttachmentWithObjectId:objectId type:CDMsgTypeImage toPeerId:self.chatUser.objectId group:self.group];
 }
 
 //  Optional delegate method
@@ -542,7 +542,7 @@
      */
     [JSQSystemSoundPlayer jsq_playMessageSentSound];
     
-    [sessionManager sendMessage:text type:CDMsgTypeText
+    [sessionManager sendMessageWithType:CDMsgTypeText content:text
                        toPeerId:self.chatUser.objectId group:self.group];
     
     [self finishSendingMessage];

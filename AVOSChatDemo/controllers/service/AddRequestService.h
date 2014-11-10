@@ -12,6 +12,6 @@
 
 @interface AddRequestService : NSObject
 
-+(void)findAddRequests:(AVArrayResultBlock)callback;
++(void)findAddRequestsWtihCallback:(AVArrayResultBlock)callback;
 
 @end

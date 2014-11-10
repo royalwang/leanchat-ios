@@ -155,7 +155,7 @@ clickedButtonAtIndex:(NSInteger)buttonIndex{
     UILabel* label=(UILabel*)[cell viewWithTag:labelTag];
     UIImageView* imageView=(UIImageView*)[cell viewWithTag:imageTag];
     
-    [UserService displayAvatar:user avatarView:imageView];
+    [UserService displayAvatarOfUser:user avatarView:imageView];
     label.text=user.username;
     return cell;
 }

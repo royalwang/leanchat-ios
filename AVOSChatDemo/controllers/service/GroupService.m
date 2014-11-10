@@ -12,7 +12,7 @@
 
 @implementation GroupService
 
-+(void)findGroups:(AVArrayResultBlock)callback{
++(void)findGroupsWithCallback:(AVArrayResultBlock)callback{
     User* user=[User currentUser];
     AVQuery* q=[ChatGroup query];
     [q includeKey:@"owner"];

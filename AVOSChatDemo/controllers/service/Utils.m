@@ -21,7 +21,7 @@
     [Utils alert:[error localizedDescription]];
 }
 
-+(NSString*)md5:(NSString*)s{
++(NSString*)md5OfString:(NSString*)s{
     const char *ptr = [s UTF8String];
     unsigned char md5Buffer[CC_MD5_DIGEST_LENGTH];
     
@@ -34,7 +34,7 @@
     return output;
 }
 
-+(UIActivityIndicatorView*)showIndicator:(UIView*)hookView{
++(UIActivityIndicatorView*)showIndicatorAtView:(UIView*)hookView{
     UIActivityIndicatorView *indicator = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
     indicator.center = CGPointMake(hookView.frame.size.width * 0.5, hookView.frame.size.height * 0.5-50);
     [hookView addSubview:indicator];

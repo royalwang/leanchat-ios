@@ -18,7 +18,7 @@
 
 #pragma conversation
 - (NSArray *)chatRooms;
--(void)findConversations:(AVArrayResultBlock)callback;
+-(void)findConversationsWithCallback:(AVArrayResultBlock)callback;
 
 
 #pragma session
@@ -28,13 +28,13 @@
 -(void)closeSession;
 
 #pragma operation message
-- (void)sendMessage:(NSString *)content type:(CDMsgType)type toPeerId:(NSString *)toPeerId group:(AVGroup*)group;
-- (void)sendAttachment:(NSString*)objectId type:(CDMsgType)type toPeerId:(NSString *)toPeerId group:(AVGroup*)group;
+- (void)sendMessageWithType:(CDMsgType)type content:(NSString *)content  toPeerId:(NSString *)toPeerId group:(AVGroup*)group;
+- (void)sendAttachmentWithObjectId:(NSString*)objectId type:(CDMsgType)type toPeerId:(NSString *)toPeerId group:(AVGroup*)group;
 
 - (NSArray*)getMsgsForConvid:(NSString*)convid;
-+(NSString*)getConvid:(CDMsgRoomType)roomType otherId:(NSString*)otherId groupId:(NSString*)groupId;
++(NSString*)getConvidOfRoomType:(CDMsgRoomType)roomType otherId:(NSString*)otherId groupId:(NSString*)groupId;
 - (void)clearData;
-+(NSString*)convid:(NSString*)myId otherId:(NSString*)otherId;
++(NSString*)convidOfSelfId:(NSString*)myId andOtherId:(NSString*)otherId;
 +(NSString*)getPathByObjectId:(NSString*)objectId;
 +(NSString*)uuid;
 
@@ -43,8 +43,8 @@
 - (void)getHistoryMessagesForGroup:(NSString *)groupId callback:(AVArrayResultBlock)callback;
 
 #pragma group
-- (AVGroup *)joinGroup:(NSString *)groupId;
-- (void)startNewGroup:(NSString*)name callback:(AVGroupResultBlock)callback ;
+- (AVGroup *)joinGroupById:(NSString *)groupId;
+- (void)saveNewGroupWithName:(NSString*)name withCallback:(AVGroupResultBlock)callback ;
 -(void)inviteMembersToGroup:(ChatGroup*) chatGroup userIds:(NSArray*)userIds;
 -(void)kickMemberFromGroup:(ChatGroup*)chatGroup userId:(NSString*)userId;
 -(void)quitFromGroup:(ChatGroup*)chatGroup;

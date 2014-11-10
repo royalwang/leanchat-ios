@@ -11,7 +11,7 @@
 
 @implementation UserService
 
-+(void)findFriends:(AVArrayResultBlock )block{
++(void)findFriendsWithCallback:(AVArrayResultBlock )block{
     User *user=[User currentUser];
     AVRelation *relation=[user relationforKey:@"friends"];
     //    //设置缓存有效期
@@ -21,12 +21,12 @@
     [q findObjectsInBackgroundWithBlock:block];
 }
 
-+(NSString*)getPeerId:(User*)user{
++(NSString*)getPeerIdOfUser:(User*)user{
     return user.objectId;
 }
 
 // should exclude friends
-+(void)findUsers:(NSString *)partName withBlock:(AVArrayResultBlock)block{
++(void)findUsersByPartname:(NSString *)partName withBlock:(AVArrayResultBlock)block{
     AVQuery *q=[User query];
     [q setCachePolicy:kAVCachePolicyNetworkElseCache];
     [q whereKey:@"username" containsString:partName];
@@ -35,7 +35,7 @@
     [q findObjectsInBackgroundWithBlock:block];
 }
 
-+(void)findUsers:(NSArray*)userIds callback:(AVArrayResultBlock)callback{
++(void)findUsersByIds:(NSArray*)userIds callback:(AVArrayResultBlock)callback{
     if([userIds count]>0){
         AVQuery *q=[User query];
         [q setCachePolicy:kAVCachePolicyNetworkElseCache];
@@ -46,7 +46,7 @@
     }
 }
 
-+(void)displayAvatar:(User*)user avatarView:(UIImageView*)avatarView{
++(void)displayAvatarOfUser:(User*)user avatarView:(UIImageView*)avatarView{
     AVFile* avatar=[user objectForKey:@"avatar"];
     if(avatar){
         [avatarView setImageWithURL:[NSURL URLWithString:avatar.url] placeholderImage:[UIImage imageNamed:@"default_user_avatar"]];

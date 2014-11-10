@@ -93,7 +93,7 @@ static NSString *messagesTableSQL=@"create table if not exists messages (id inte
     [_session close];
 }
 
--(void)cacheMsgs:(NSArray*)msgs callback:(AVArrayResultBlock)callback{
+-(void)cacheMsgs:(NSArray*)msgs withCallback:(AVArrayResultBlock)callback{
     NSMutableSet* userIds=[[NSMutableSet alloc] init];
     for(Msg* msg in msgs){
         NSString* otherId=[msg getOtherId];
@@ -111,7 +111,7 @@ static NSString *messagesTableSQL=@"create table if not exists messages (id inte
             [uncachedUserIds addObject:userId];
         }
     }
-    [UserService findUsers:[[NSMutableArray alloc] initWithArray:[uncachedUserIds allObjects]] callback:^(NSArray *objects, NSError *error) {
+    [UserService findUsersByIds:[[NSMutableArray alloc] initWithArray:[uncachedUserIds allObjects]] callback:^(NSArray *objects, NSError *error) {
         if(objects){
             [self registerUsers:objects];
         }
@@ -119,11 +119,11 @@ static NSString *messagesTableSQL=@"create table if not exists messages (id inte
     }];
 }
 
--(void)findConversations:(AVArrayResultBlock)callback{
+-(void)findConversationsWithCallback:(AVArrayResultBlock)callback{
     User* user=[User currentUser];
     FMResultSet *rs = [_database executeQuery:@"select * from messages where ownerId=? group by convid order by timestamp desc" withArgumentsInArray:@[user.objectId]];
     NSArray *msgs=[self getMsgsByResultSet:rs];
-    [self cacheMsgs:msgs callback:^(NSArray *objects, NSError *error) {
+    [self cacheMsgs:msgs withCallback:^(NSArray *objects, NSError *error) {
         if(error){
             callback(objects,error);
         }else{
@@ -190,17 +190,17 @@ static NSString *messagesTableSQL=@"create table if not exists messages (id inte
     return [AVGroup getGroupWithGroupId:groupId session:_session];
 }
 
-- (AVGroup *)joinGroup:(NSString *)groupId {
+- (AVGroup *)joinGroupById:(NSString *)groupId {
     AVGroup *group = [self getGroupById:groupId];
     group.delegate = self;
     [group join];
     return group;
 }
 
-- (void)startNewGroup:(NSString*)name callback:(AVGroupResultBlock)callback {
+- (void)saveNewGroupWithName:(NSString*)name withCallback:(AVGroupResultBlock)callback {
     [AVGroup createGroupWithSession:_session groupDelegate:self callback:^(AVGroup *group, NSError *error) {
         if(error==nil){
-            [CloudService saveChatGroup:group.groupId name:name callback:^(id object, NSError *error) {
+            [CloudService saveChatGroupWithId:group.groupId name:name callback:^(id object, NSError *error) {
                 callback(group,error);
             }];
         }else{
@@ -215,7 +215,7 @@ static NSString *messagesTableSQL=@"create table if not exists messages (id inte
     return msg;
 }
 
-+(NSString*)convid:(NSString*)myId otherId:(NSString*)otherId{
++(NSString*)convidOfSelfId:(NSString*)myId andOtherId:(NSString*)otherId{
     NSArray *arr=@[myId,otherId];
     NSArray *sortedArr=[arr sortedArrayUsingSelector:@selector(localizedCaseInsensitiveCompare:)];
     NSMutableString* result= [[NSMutableString alloc] init];
@@ -225,7 +225,7 @@ static NSString *messagesTableSQL=@"create table if not exists messages (id inte
         }
         [result appendString:[sortedArr objectAtIndex:i]];
     }
-    return [Utils md5:result];
+    return [Utils md5OfString:result];
 }
 
 +(NSString*)uuid{
@@ -241,16 +241,16 @@ static NSString *messagesTableSQL=@"create table if not exists messages (id inte
     return result;
 }
 
-+(NSString*)getConvid:(CDMsgRoomType)roomType otherId:(NSString*)otherId groupId:(NSString*)groupId{
++(NSString*)getConvidOfRoomType:(CDMsgRoomType)roomType otherId:(NSString*)otherId groupId:(NSString*)groupId{
     if(roomType==CDMsgRoomTypeSingle){
         NSString* curUserId=[User curUserId];
-        return [CDSessionManager convid:curUserId otherId:otherId];
+        return [CDSessionManager convidOfSelfId:curUserId andOtherId:otherId];
     }else{
         return groupId;
     }
 }
 
--(Msg*)createAndSendMsg:(NSString*)objectId type:(CDMsgType)type content:(NSString*)content toPeerId:(NSString*)toPeerId group:(AVGroup*)group{
+-(Msg*)createAndSendMsgWithObjectId:(NSString*)objectId type:(CDMsgType)type content:(NSString*)content toPeerId:(NSString*)toPeerId group:(AVGroup*)group{
     Msg* msg=[[Msg alloc] init];
     msg.toPeerId=toPeerId;
     int64_t currentTime=[[NSDate date] timeIntervalSince1970]*1000;
@@ -267,21 +267,21 @@ static NSString *messagesTableSQL=@"create table if not exists messages (id inte
         msg.roomType=CDMsgRoomTypeGroup;
         msg.toPeerId=@"";
     }
-    msg.convid=[CDSessionManager getConvid:msg.roomType otherId:msg.toPeerId groupId:group.groupId];
+    msg.convid=[CDSessionManager getConvidOfRoomType:msg.roomType otherId:msg.toPeerId groupId:group.groupId];
     msg.objectId=objectId;
     msg.type=type;
-    return [self sendMsg:group msg:msg];
+    return [self sendMsg:msg group:group];
 }
 
--(Msg*)createAndSendMsg:(CDMsgType)type content:(NSString*)content toPeerId:(NSString*)toPeerId group:(AVGroup*)group{
-    return [self createAndSendMsg:[CDSessionManager uuid] type:type content:content toPeerId:toPeerId group:group];
+-(Msg*)createAndSendMsgWithType:(CDMsgType)type content:(NSString*)content toPeerId:(NSString*)toPeerId group:(AVGroup*)group{
+    return [self createAndSendMsgWithObjectId:[CDSessionManager uuid] type:type content:content toPeerId:toPeerId group:group];
 }
 
 -(AVSession*)getSession{
     return _session;
 }
 
--(Msg*)sendMsg:(AVGroup*)group msg:(Msg*)msg{
+-(Msg*)sendMsg:(Msg*)msg group:(AVGroup*)group{
     if(!group){
         AVMessage *avMsg=[AVMessage messageForPeerWithSession:_session toPeerId:msg.toPeerId payload:[msg toMessagePayload]];
         [_session sendMessage:avMsg];
@@ -292,13 +292,13 @@ static NSString *messagesTableSQL=@"create table if not exists messages (id inte
     return msg;
 }
 
-- (void)sendMessage:(NSString *)content type:(CDMsgType)type toPeerId:(NSString *)toPeerId group:(AVGroup*)group{
-    Msg* msg=[self createAndSendMsg:type content:content toPeerId:toPeerId group:group];
+- (void)sendMessageWithType:(CDMsgType)type content:(NSString *)content  toPeerId:(NSString *)toPeerId group:(AVGroup*)group{
+    Msg* msg=[self createAndSendMsgWithType:type content:content toPeerId:toPeerId group:group];
     [self insertMessageToDBAndNotify:msg];
 }
 
-- (void)sendMessage:(NSString*)objectId content:(NSString *)content type:(CDMsgType)type toPeerId:(NSString *)toPeerId group:(AVGroup*)group{
-    Msg* msg=[self createAndSendMsg:objectId type:type content:content toPeerId:toPeerId group:group];
+- (void)sendMessageWithObjectId:(NSString*)objectId content:(NSString *)content type:(CDMsgType)type toPeerId:(NSString *)toPeerId group:(AVGroup*)group{
+    Msg* msg=[self createAndSendMsgWithObjectId:objectId type:type content:content toPeerId:toPeerId group:group];
     [self insertMessageToDBAndNotify:msg];
 }
 
@@ -322,7 +322,7 @@ static NSString *messagesTableSQL=@"create table if not exists messages (id inte
     return [[self getFilesPath] stringByAppendingString:objectId];
 }
 
-- (void)sendAttachment:(NSString*)objectId type:(CDMsgType)type toPeerId:(NSString *)toPeerId group:(AVGroup*)group{
+- (void)sendAttachmentWithObjectId:(NSString*)objectId type:(CDMsgType)type toPeerId:(NSString *)toPeerId group:(AVGroup*)group{
     NSString* path=[CDSessionManager getPathByObjectId:objectId];
     User* curUser=[User currentUser];
     double time=[[NSDate date] timeIntervalSince1970];
@@ -333,7 +333,7 @@ static NSString *messagesTableSQL=@"create table if not exists messages (id inte
         if(error){
             [Utils alert:[error localizedDescription]];
         }else{
-            [self sendMessage:objectId content:f.url type:type toPeerId:toPeerId group:group];
+            [self sendMessageWithObjectId:objectId content:f.url type:type toPeerId:toPeerId group:group];
         }
     }];
 }
@@ -381,7 +381,7 @@ static NSString *messagesTableSQL=@"create table if not exists messages (id inte
     return result;
 }
 
-- (NSArray *)getMessagesForGroup:(NSString *)groupId {
+- (NSArray *)getMsgesForGroup:(NSString *)groupId {
     FMResultSet *rs = [_database executeQuery:@"select fromid, toid, type, message,  time from messages where toid=?" withArgumentsInArray:@[groupId]];
     return [self getMsgsByResultSet:rs];
 }
@@ -420,16 +420,16 @@ static NSString *messagesTableSQL=@"create table if not exists messages (id inte
     resMsg.type=CDMsgTypeResponse;
     resMsg.toPeerId=msg.fromPeerId;
     resMsg.fromPeerId=[User curUserId];
-    resMsg.convid=[CDSessionManager convid:msg.fromPeerId otherId:[User curUserId]];
+    resMsg.convid=[CDSessionManager convidOfSelfId:msg.fromPeerId andOtherId:[User curUserId]];
     resMsg.roomType=CDMsgRoomTypeSingle;
     resMsg.status=CDMsgStatusSendStart;
     resMsg.content=@"";
     resMsg.objectId=msg.objectId;
-    [self sendMsg:nil msg:resMsg];
+    [self sendMsg:resMsg group:nil];
     NSLog(@"send response msg");
 }
 
--(void)didReceiveMessage:(AVMessage*)avMsg group:(AVGroup*)group{
+-(void)didReceiveAVMessage:(AVMessage*)avMsg group:(AVGroup*)group{
     NSLog(@"%s",__PRETTY_FUNCTION__);
     NSLog(@"payload=%@",avMsg.payload);
     Msg* msg=[Msg fromAVMessage:avMsg];
@@ -458,20 +458,20 @@ static NSString *messagesTableSQL=@"create table if not exists messages (id inte
         });
     }else{
         msg.status=CDMsgStatusSendReceived;
-        [self updateStatus:msg];
+        [self updateStatusOfMsg:msg];
         [self notifyMessageUpdate];
     }
 }
 
--(void)updateStatusAndTimestamp:(Msg*)msg{
+-(void)updateStatusAndTimestampOfMsg:(Msg*)msg{
     NSLog(@"%s",__PRETTY_FUNCTION__);
-    [self updateStatus:msg];
+    [self updateStatusOfMsg:msg];
     NSString* timestamp=[NSString stringWithFormat:@"%lld",msg.timestamp];
     NSLog(@"timestamp=%@",timestamp);
     [_database executeUpdate:@"update messages set timestamp=? where objectId=?" withArgumentsInArray:@[timestamp,msg.objectId]];
 }
 
--(void)updateStatus:(Msg*)msg{
+-(void)updateStatusOfMsg:(Msg*)msg{
     [_database executeUpdate:@"update messages set status=? where objectId=?" withArgumentsInArray:@[@(msg.status),msg.objectId]];
 }
 
@@ -479,7 +479,7 @@ static NSString *messagesTableSQL=@"create table if not exists messages (id inte
     Msg* msg=[Msg fromAVMessage:avMsg];
     if(msg.type!=CDMsgTypeResponse){
         msg.status=CDMsgStatusSendSucceed;
-        [self updateStatusAndTimestamp:msg];
+        [self updateStatusAndTimestampOfMsg:msg];
         [self notifyMessageUpdate];
     }
 }
@@ -487,13 +487,13 @@ static NSString *messagesTableSQL=@"create table if not exists messages (id inte
 -(void)messageSendFailure:(AVMessage*)avMsg group:(AVGroup*)group{
     Msg* msg=[Msg fromAVMessage:avMsg];
     msg.status=CDMsgStatusSendFailed;
-    [self updateStatus:msg];
+    [self updateStatusOfMsg:msg];
     [self notifyMessageUpdate];
 }
 
 #pragma session delegate
 - (void)session:(AVSession *)session didReceiveMessage:(AVMessage *)message {
-    [self didReceiveMessage:message group:nil];
+    [self didReceiveAVMessage:message group:nil];
 }
 
 - (void)session:(AVSession *)session messageSendFailed:(AVMessage *)message error:(NSError *)error {
@@ -520,7 +520,7 @@ static NSString *messagesTableSQL=@"create table if not exists messages (id inte
 
 #pragma mark - AVGroupDelegate
 - (void)group:(AVGroup *)group didReceiveMessage:(AVMessage *)message {
-    [self didReceiveMessage:message group:group];
+    [self didReceiveAVMessage:message group:group];
     //[[NSNotificationCenter defaultCenter] postNotificationName:NOTIFICATION_SESSION_UPDATED object:group.session userInfo:nil];
 
 }
@@ -597,7 +597,7 @@ static NSString *messagesTableSQL=@"create table if not exists messages (id inte
 }
 
 -(void)cacheChatGroupsWithIds:(NSMutableSet*)groupIds withCallback:(AVArrayResultBlock)callback{
-    [GroupService findGroups:^(NSArray *objects, NSError *error) {
+    [GroupService findGroupsWithCallback:^(NSArray *objects, NSError *error) {
         [Utils filterError:error callback:^{
             for(ChatGroup* chatGroup in objects){
                 [self registerChatGroup:chatGroup];

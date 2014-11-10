@@ -63,7 +63,7 @@
 
 -(void)confirm:(id)sender {
     if (self.type == CDMsgRoomTypeGroup) {
-        [[CDSessionManager sharedInstance] joinGroup:self.otherId];
+        [[CDSessionManager sharedInstance] joinGroupById:self.otherId];
     } else if (self.type == CDMsgRoomTypeSingle) {
         [[CDSessionManager sharedInstance] watchPeerId:self.otherId];
     }

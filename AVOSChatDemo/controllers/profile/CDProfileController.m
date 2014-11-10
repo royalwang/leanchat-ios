@@ -40,7 +40,7 @@
     }
     self.nameLabel.text = username;
     [self.logoutBtn addTarget:self action:@selector(logout:) forControlEvents:UIControlEventTouchUpInside];
-    [UserService displayAvatar:user avatarView:self.avatarView];
+    [UserService displayAvatarOfUser:user avatarView:self.avatarView];
 }
 
 - (void)didReceiveMemoryWarning {

@@ -14,9 +14,9 @@ static NSString *kRemoveFriendFnName=@"removeFriend";
 
 @interface CloudService : NSObject
 
-+(void)callCloudRelationFn:(User*)fromUser toUser:(User*)toUser action:(NSString*)action callback:(AVIdResultBlock)callback;
-+(void)tryCreateAddRequest:(User*)toUser callback:(AVIdResultBlock)callback;
-+(void)agreeAddRequest:(NSString*)objectId callback:(AVIdResultBlock)callback;
-+(void)saveChatGroup:(NSString*)groupId name:(NSString*)name callback:(AVIdResultBlock)callback;
++(void)callCloudRelationFnWithFromUser:(User*)fromUser toUser:(User*)toUser action:(NSString*)action callback:(AVIdResultBlock)callback;
++(void)tryCreateAddRequestWithToUser:(User*)toUser callback:(AVIdResultBlock)callback;
++(void)agreeAddRequestWithId:(NSString*)objectId callback:(AVIdResultBlock)callback;
++(void)saveChatGroupWithId:(NSString*)groupId name:(NSString*)name callback:(AVIdResultBlock)callback;
 
 @end
