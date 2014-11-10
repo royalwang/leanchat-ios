@@ -28,7 +28,7 @@
                     <rect key="frame" x="99" y="95" width="106" height="54"/>
                 </imageView>
                 <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="xgK-ZO-Nkd" customClass="ResizableButton">
-                    <rect key="frame" x="111" y="238" width="99" height="44"/>
+                    <rect key="frame" x="32" y="240" width="257" height="44"/>
                     <inset key="imageEdgeInsets" minX="5" minY="5" maxX="5" maxY="5"/>
                     <state key="normal" title="添加好友" backgroundImage="blue_expand_normal.png">
                         <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>

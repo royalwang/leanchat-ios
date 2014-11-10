@@ -21,7 +21,9 @@ enum : NSUInteger {
 
 @interface CDChatListController ()  {
     CDPopMenu *_popMenu;
+    CDSessionManager* sessionManager;
 }
+
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
 
 @end
@@ -40,27 +42,37 @@ static NSString *cellIdentifier = @"ContactCell";
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAdd target:self action:@selector(showMenuOnView:)];
+    //self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAdd target:self action:@selector(showMenuOnView:)];
     NSString* nibName=NSStringFromClass([CDImageLabelTableCell class]);
     self.tableView.dataSource=self;
     self.tableView.delegate=self;
     [self.tableView registerNib:[UINib nibWithNibName:nibName bundle:nil] forCellReuseIdentifier:cellIdentifier];
+    sessionManager=[CDSessionManager sharedInstance];
 }
 
-- (void)viewWillAppear:(BOOL)animated {
-    [super viewWillAppear:animated];
-    [[CDSessionManager sharedInstance] findConversations:^(NSArray *objects, NSError *error) {
+-(void)viewDidAppear:(BOOL)animated{
+    [super viewDidAppear:animated];
+    [self refresh];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(messageUpdated) name:NOTIFICATION_MESSAGE_UPDATED object:nil];
+}
+
+-(void)viewDidDisappear:(BOOL)animated{
+    [super viewDidDisappear:animated];
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:NOTIFICATION_MESSAGE_UPDATED object:nil];
+}
+
+-(void)messageUpdated{
+    [self refresh];
+}
+
+-(void)refresh{
+    [Utils showNetworkIndicator];
+    [sessionManager findConversations:^(NSArray *objects, NSError *error) {
+        [Utils hideNetworkIndicator];
         [Utils filterError:error callback:^{
             [self.tableView reloadData];
         }];
     }];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(sessionUpdated:) name:NOTIFICATION_SESSION_UPDATED object:nil];
-}
-
-
-- (void)viewDidDisappear:(BOOL)animated {
-    [super viewDidDisappear:animated];
-    [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
 - (void)didReceiveMemoryWarning {
@@ -72,28 +84,14 @@ static NSString *cellIdentifier = @"ContactCell";
     [self.popMenu showMenuOnView:self.navigationController.view atPoint:CGPointZero];
 }
 
-- (void)addContactForGroup {
-    
-}
-
-- (void)addScan {
-
-    NSMutableSet *readers = [[NSMutableSet alloc ] init];
-}
+#pragma table view
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
     return 40;
 }
 
-#pragma table view
-
-- (CGFloat) tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
-{
-    return 0.0f;
-}
-
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    return [[[CDSessionManager sharedInstance] chatRooms] count];
+    return [[sessionManager chatRooms] count];
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
@@ -159,10 +157,8 @@ static NSString *cellIdentifier = @"ContactCell";
         popMenu.popMenuSelected = ^(NSInteger index, CDPopMenuItem *item) {
             switch (index) {
                 case 0:
-                    [self addContactForGroup];
                     break;
                 case 1:
-                    [self addScan];
                     break;
                     
                 default:
@@ -193,9 +189,5 @@ static NSString *cellIdentifier = @"ContactCell";
         }
     }];
     // [self dismissViewControllerAnimated:NO completion:nil];
-}
-
-- (void)sessionUpdated:(NSNotification *)notification {
-    [self.tableView reloadData];
 }
 @end

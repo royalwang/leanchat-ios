@@ -11,22 +11,16 @@
 #import "UserService.h"
 #import "CDBaseNavigationController.h"
 #import "CDUserInfoController.h"
+#import "CDImageLabelTableCell.h"
 
 @interface CDAddFriendController (){
     NSArray *users;
 }
 @end
 
-@implementation CDAddFriendController
+static NSString* cellIndentifier=@"cellIndentifier";
 
-- (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
-{
-    self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
-    if (self) {
-        // Custom initialization
-    }
-    return self;
-}
+@implementation CDAddFriendController
 
 - (void)viewDidLoad
 {
@@ -35,6 +29,8 @@
     [_searchBar setDelegate:self];
     [_tableView setDelegate:self];
     [_tableView setDataSource:self];
+    UINib* nib=[UINib nibWithNibName:NSStringFromClass([CDImageLabelTableCell class]) bundle:nil];
+    [self.tableView registerNib:nib forCellReuseIdentifier:cellIndentifier];
     [self searchUser:@""];
     // Do any additional setup after loading the view from its nib.
 }
@@ -57,12 +53,13 @@
 }
 
 -(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
-    UITableViewCell *cell=[tableView dequeueReusableCellWithIdentifier:@"tableCell"];
+    CDImageLabelTableCell *cell=[tableView dequeueReusableCellWithIdentifier:cellIndentifier forIndexPath:indexPath];
     if(!cell){
-        cell=[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"tableCell"];
+        cell=[[CDImageLabelTableCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellIndentifier];
     }
     User *user=(User*)users[indexPath.row];
-    cell.textLabel.text=user.username;
+    cell.myLabel.text=user.username;
+    [UserService displayAvatar:user avatarView:cell.myImageView];
     return cell;
 }
 

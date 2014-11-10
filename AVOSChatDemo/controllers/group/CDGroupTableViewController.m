@@ -11,11 +11,15 @@
 #import "GroupService.h"
 #import "CDChatRoomController.h"
 #import "CDNewGroupViewController.h"
+#import "CDImageLabelTableCell.h"
 
 @interface CDGroupTableViewController (){
     NSArray* chatGroups;
+    UIImage * groupImage;
 }
 @end
+
+static NSString* cellIndentifier=@"cell";
 
 @implementation CDGroupTableViewController
 
@@ -29,6 +33,10 @@
     // self.navigationItem.rightBarButtonItem = self.editButtonItem;
     self.title=@"群组";
     self.navigationItem.rightBarButtonItem=[[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAdd target:self action:@selector(goNewGroup)];
+    NSString* nibName=NSStringFromClass([CDImageLabelTableCell class]);
+    UINib* nib=[UINib nibWithNibName:nibName bundle:nil];;
+    [self.tableView registerNib:nib forCellReuseIdentifier:cellIndentifier];
+    groupImage=[UIImage imageNamed:@"group_icon"];
 }
 
 -(void)viewDidAppear:(BOOL)animated{
@@ -56,25 +64,23 @@
 #pragma mark - Table view data source
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
-#warning Potentially incomplete method implementation.
     // Return the number of sections.
     return 1;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-#warning Incomplete method implementation.
     // Return the number of rows in the section.
     return chatGroups.count;
 }
 
-
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"cell"];
+    CDImageLabelTableCell *cell = [tableView dequeueReusableCellWithIdentifier:@"cell"];
     if(cell==nil){
-        cell=[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"cell"];
+        cell=[[CDImageLabelTableCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"cell"];
     }
     ChatGroup* chatGroup=[chatGroups objectAtIndex:indexPath.row];
-    cell.textLabel.text=[chatGroup getTitle];
+    cell.myLabel.text=[chatGroup getTitle];
+    [cell.myImageView setImage:groupImage];
     // Configure the cell...
     
     return cell;
